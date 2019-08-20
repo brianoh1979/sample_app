@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
-  get 'static_pages/home'
+  root 'static_pages#home'
   get 'static_pages/help'
   get  'static_pages/about'
-  root 'application#hello' #re-adding after git push mess
+  get  'static_pages/contact'
+  #root 'application#hello' 
+  #re-adding after git push mess
 end
