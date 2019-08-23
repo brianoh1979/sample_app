@@ -6,7 +6,7 @@ jobs:
     steps:
       - checkout
       - run: echo "A first hello"
-  build:
+  build2:
     docker:
       - image: circleci/ruby:2.6.3
     steps:
