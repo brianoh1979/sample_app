@@ -1,8 +1,9 @@
-version: 2
-jobs:
-  one:
-    docker:
-      - image: circleci/ruby:2.6.3
-    steps:
-      - checkout
-      - run: bundle instaLL
+ version: 2
+ jobs:
+   build:
+     docker:
+       - image: circleci/ruby:2.6.3
+     steps:
+       - checkout
+       - run: bundle install
+
