@@ -5,6 +5,11 @@
        - image: circleci/ruby:2.6.3
      steps:
        - checkout
+       - run:
+          name: install dependencies
+          command: |
+            gem update --system
+            gem install bundler
        - run: bundle update --bundler
        - run: bundle install
 
