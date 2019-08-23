@@ -10,7 +10,7 @@
           command: |
             gem update --system
             gem install bundler
+       - run: bundle update rails     
        - run: bundle update --bundler
-       - run: bundle update rails
        - run: bundle install
 
