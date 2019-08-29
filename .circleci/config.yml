@@ -13,5 +13,8 @@
        - run: bundle update rails     
        - run: bundle update --bundler
        - run: bundle install
+       - run: rails test
+    
+       
      
 
