@@ -10,6 +10,8 @@
           command: |
             gem update --system
             gem install bundler
+
+       # Below step should kick in from second run onwards
        - restore_cache:
           keys:
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
