@@ -48,6 +48,10 @@
        - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: test-results.xml
        # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
+<<<<<<< HEAD
+=======
+    
+>>>>>>> fb65d33c198f337644b65bf1df00367864fabd50
     
        
      
