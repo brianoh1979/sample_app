@@ -1,0 +1,33 @@
+ version: 2
+ jobs:
+   build:
+     docker:
+       - image: circleci/ruby:2.6.3-node
+     steps:
+       - checkout
+       - run:
+          name: install dependencies
+          command: |
+            gem update --system
+            gem install bundler
+
+       # Below step should kick in from second run onwards
+       - restore_cache:
+          keys:
+            - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            - gem-cache-v1-{{ arch }}-{{ .Branch }}
+            - gem-cache-v1
+
+       - run: bundle update rails     
+       - run: bundle update --bundler
+       - run: bundle install --path vendor/bundle
+
+       - save_cache:
+          key: gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+       - run: rails test
+    
+       
+     
+
