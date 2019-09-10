@@ -35,7 +35,7 @@
           paths:
             - vendor/bundle
        - run: rails server &
-       - run: netstat -an | grep "3000"
+       - run: netstat -an
        - run: rails test
        - run: # open cypress and use sample_spec.js
           name: run
