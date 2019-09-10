@@ -12,6 +12,7 @@ SimpleCov.start 'rails' do
   add_filter '/test/' # for minitest
 end
 
+require 'rails/test_help'
 
 class ActiveSupport::TestCase
   fixtures :all
