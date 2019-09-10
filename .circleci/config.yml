@@ -36,6 +36,7 @@
             - vendor/bundle
        - run: rails server &
        - run: netstat -an
+       - run: ps -ef | grep puma
        - run: rails test
        - run: # open cypress and use sample_spec.js
           name: run
