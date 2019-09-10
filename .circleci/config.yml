@@ -36,8 +36,8 @@
             - vendor/bundle
        - run: rails test
        - run: # open cypress and use sample_spec.js
-          name: open
-          command: ./node_modules/.bin/cypress open
+          name: run
+          command: npm run cy:run -- --record --spec "cypress/integration/sample_spec.js"
      #  - run: # run coverage report
      #     name: code-coverage
      #     command: './node_modules/.bin/nyc report --reporter=text-lcov'
