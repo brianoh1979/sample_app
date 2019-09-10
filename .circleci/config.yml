@@ -5,9 +5,9 @@
        - image: circleci/ruby:2.6.3-node
      steps:
        - checkout
-#       - run:
-#          name: update-npm
-#          command: 'sudo npm install -g npm@latest'
+       - run:
+          name: install cypress
+          command: npm install cypress --save-dev
        - run:
           name: install dependencies
           command: |
