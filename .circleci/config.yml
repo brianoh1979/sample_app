@@ -34,7 +34,7 @@
           key: gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
-       - run: rails server
+       - run: rails server &
        - run: rails test
        - run: # open cypress and use sample_spec.js
           name: run
