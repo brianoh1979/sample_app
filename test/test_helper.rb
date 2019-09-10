@@ -4,6 +4,14 @@ require 'rails/test_help'
 #require "minitest/assert_select"
 require "minitest/reporters"
 Minitest::Reporters.use!
+require 'simplecov'
+SimpleCov.start 'rails' do
+  add_filter '/bin/'
+  add_filter '/db/'
+  add_filter '/spec/' # for rspec
+  add_filter '/test/' # for minitest
+end
+
 
 class ActiveSupport::TestCase
   fixtures :all
