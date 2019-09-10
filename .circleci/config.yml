@@ -32,9 +32,9 @@
           paths:
             - vendor/bundle
        - run: rails test
- #      - run: # run tests
- #         name: test
- #         command: npm test
+       - run: # open cypress and use sample_spec.js
+          name: open
+          command: ./node_modules/.bin/cypress open
      #  - run: # run coverage report
      #     name: code-coverage
      #     command: './node_modules/.bin/nyc report --reporter=text-lcov'
