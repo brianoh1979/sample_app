@@ -38,7 +38,7 @@
        - run: rails server &
        - run: netstat -an
        - run: ps -ef | grep puma
-       - run: rubocop -a
+       - run: rubocop
        - run: rails test
        - run: # open cypress and use sample_spec.js
           name: run
