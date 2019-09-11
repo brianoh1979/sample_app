@@ -9,7 +9,6 @@
        - run:
           name: Install Cypress dependencies
           command: sudo apt-get install xvfb libgtk-3-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 --fix-missing
- #         command: sudo apt-get install xvfb libgtk-3-dev libnotify-dev libgconf-2-4 libxss1 libasound2 --fix-missing
        - run:
           name: install cypress
           command: npm install cypress --save-dev
@@ -46,10 +45,10 @@
      #  - run: # run coverage report
      #     name: code-coverage
      #     command: './node_modules/.bin/nyc report --reporter=text-lcov'
-     #  - store_artifacts: # special step to save test results as as artifact
+       - store_artifacts: # special step to save test results as as artifact
           # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
-     #     path: test-results.xml
-     #     prefix: tests
+          path: /home/circleci/project/cypress/videos/examples/*
+          destination: coverage 
        - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
           path: coverage
           prefix: coverage
