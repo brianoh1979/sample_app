@@ -15,6 +15,7 @@ gem 'rails', '5.1.6'
 gem 'rubocop', require: false
 gem 'fasterer'
 gem 'bundler-audit'
+gem 'rails_best_practices'
 gem 'sass-rails', '5.0.6'
 gem 'simplecov', require: false, group: :test
 gem 'turbolinks', '5.0.1'
