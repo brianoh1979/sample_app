@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
-#  get 'sessions/new'
+  #  get 'sessions/new'
 
   root 'static_pages#home'
   get  '/help',    to: 'static_pages#help'
@@ -9,6 +11,6 @@ Rails.application.routes.draw do
   get    '/login',   to: 'sessions#new'
   post   '/login',   to: 'sessions#create'
   delete '/logout',  to: 'sessions#destroy'
-  post '/signup',  to: 'users#create'
+  post '/signup', to: 'users#create'
   resources :users
 end

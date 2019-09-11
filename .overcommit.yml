@@ -29,3 +29,7 @@ PreCommit:
     
   BundleCheck:
     enabled: true
+  
+#  PreCommit:
+#  RuboCop:
+#    enabled: true
