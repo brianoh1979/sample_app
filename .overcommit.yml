@@ -29,6 +29,10 @@ PreCommit:
     
   BundleCheck:
     enabled: true
+
+#  PreCommit:
+#  Fasterer:
+#    enabled: true
   
 #  PreCommit:
 #  RuboCop:
