@@ -40,7 +40,7 @@
        - run: ps -ef | grep puma
      #  - run: fasterer
      #  - run: rubocop
-       - run: bundle-audit
+       - run: bundle-audit check --ignore CVE-2015-7580 CVE-2015-7578 CVE-2015-7579
        - run: rails test
        - run: # open cypress and use sample_spec.js
           name: run
