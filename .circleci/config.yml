@@ -37,7 +37,7 @@
           paths:
             - vendor/bundle
        - run: bundle exec rails server --daemon
-       - run: netstat -an | grep "3000"
+       - run: netstat -an 
        - run: ps -ef | grep puma
      #  - run: fasterer
      #  - run: rubocop
