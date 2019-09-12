@@ -27,9 +27,10 @@
  #      - run:
  #         name: install-npm-wee
  #         command: npm install
-       - run: bundle update rails     
-       - run: bundle update --bundler
-       - run: bundle install --path vendor/bundle
+ #      - run: bundle update rails
+       - run: bundle install     
+ #      - run: bundle update --bundler
+ #      - run: bundle install --path vendor/bundle
 
        - save_cache:
           key: gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
