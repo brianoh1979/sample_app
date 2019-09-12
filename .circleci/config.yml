@@ -36,8 +36,8 @@
           key: gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
-       - run: rails server &
-       - run: netstat -an
+       - run: bin/rails server & --port 3000 --binding 0.0.0.0
+       - run: netstat -an | grep 3000
        - run: ps -ef | grep puma
      #  - run: fasterer
      #  - run: rubocop
