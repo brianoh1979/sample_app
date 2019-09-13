@@ -34,7 +34,7 @@
        - save_cache:
           key: gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
           paths:
-
+          - vendor/bundle
 #        - run: netstat -an
      # Start doing the tests   
    test:
