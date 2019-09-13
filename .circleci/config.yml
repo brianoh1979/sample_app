@@ -2,7 +2,7 @@
  jobs:
    build:
      docker:
-       - image: circleci/ruby:2.6.3-node
+       - image: circleci/ruby:2.6.3-node-browsers
      steps:
        - checkout
        - run: sudo apt-get update
