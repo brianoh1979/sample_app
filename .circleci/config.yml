@@ -45,7 +45,17 @@
 #       - checkout
   #  start: RAILS_ENV=test bundle exec rails server -p 3000
   #   wait-on: 'http://localhost:3000'
-       - run: docker-compose build
+  #     - run: docker-compose build
+       - run:
+          name: Waiting for Puma to be ready
+          command: |
+            for i in `seq 1 10`;
+            do
+              nc -z localhost 3000 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for Puma && exit 1
        - run: netstat -an 
        - run: ps -ef | grep puma
      #  - run: fasterer
