@@ -48,7 +48,7 @@
        - checkout
        - restore_cache:
           keys:
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" $
+            - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
        - run: netstat -an 
@@ -64,10 +64,10 @@
      #  - run: # run coverage report
      #     name: code-coverage
      #     command: './node_modules/.bin/nyc report --reporter=text-lcov'
-       - store_artifacts: # special step to save test results as as artifact
+#       - store_artifacts: # special step to save test results as as artifact
           # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
-          path: /home/circleci/project/cypress/videos/examples/*
-          destination: coverage 
+#          path: /home/circleci/project/cypress/videos/examples/*
+#          destination: coverage 
        - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
           path: coverage
           prefix: coverage
