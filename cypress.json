@@ -1,8 +1,9 @@
 {
-  "fixturesFolder": "cypress/fixtures",
+  "fixturesFolder": false,
   "integrationFolder": "cypress/integration",
   "pluginsFile": false,
-  "screenshotsFolder": "cypress/screenshots",
-  "videosFolder": "cypress/videos",
-  "supportFile": false
+  "screenshotsFolder": false,
+  "videosFolder": false,
+  "supportFile": false,
+  "pageLoadTimeout": "180000"
 }
