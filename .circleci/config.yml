@@ -45,11 +45,7 @@
 #       - checkout
   #  start: RAILS_ENV=test bundle exec rails server -p 3000
   #   wait-on: 'http://localhost:3000'
-       - restore_cache:
-          keys:
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}
-            - gem-cache-v1
+       - run: docker-compose build
        - run: netstat -an 
        - run: ps -ef | grep puma
      #  - run: fasterer
