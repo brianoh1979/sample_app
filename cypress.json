@@ -2,5 +2,5 @@
   "integrationFolder": "cypress/integration",
   "pluginsFile": false,
   "supportFile": false,
-  "pageLoadTimeout": "180000"
+  "pageLoadTimeout": 180000
 }
