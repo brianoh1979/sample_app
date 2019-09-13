@@ -1,5 +1,5 @@
 describe('The signin page', function() {
   it('successfully loads', function() {
-    cy.visit('http://localhost:3000') // change URL to match your dev URL
+    cy.visit('tcp://localhost:3000') // change URL to match your dev URL
   })
 })
