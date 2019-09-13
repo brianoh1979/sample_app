@@ -36,7 +36,15 @@
           key: gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
-       - run: bundle exec rails server --daemon
+     start: RAILS_ENV=test bundle exec rails server -p 3000
+     wait-on: 'http://localhost:3000'
+     # Start doing the tests   
+   test:
+     docker:
+       - image: circleci/ruby:2.6.3-node-browsers
+     steps:
+     #  - run: bundle exec rails server --daemon
+       - checkout
        - run: netstat -an 
        - run: ps -ef | grep puma
      #  - run: fasterer
@@ -60,7 +68,11 @@
     #   - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
     #      path: test-results.xml
        # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
-    
-       
+ workflows:
+   version: 2
+   build_and_test:
+     jobs:
+       - build
+       - test    
      
 
