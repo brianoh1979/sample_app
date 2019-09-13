@@ -47,16 +47,17 @@
   #   wait-on: 'http://localhost:3000'
   #     - run: docker-compose build
        - run: rails server --port 3000 --binding 0.0.0.0 2>&1 &
-       - run:
-          name: Waiting for Puma to be ready
-          command: |
-            for i in `seq 1 10`;
-            do
-              nc -z localhost 3000 && echo Success && exit 0
-              echo -n .
-              sleep 1
-            done
-            echo Failed waiting for Puma && exit 1
+#       - run:
+#          name: Waiting for Puma to be ready
+#          command: |
+#            for i in `seq 1 10`;
+#            do
+#              nc -z localhost 3000 && echo Success && exit 0
+#              echo -n .
+#              sleep 1
+#            done
+#            echo Failed waiting for Puma && exit 1
+       - run: sleep 10
        - run: netstat -an 
        - run: ps -ef | grep puma
      #  - run: fasterer
