@@ -46,7 +46,11 @@
   #  start: RAILS_ENV=test bundle exec rails server -p 3000
   #   wait-on: 'http://localhost:3000'
   #     - run: docker-compose build
-       - run: bundle exec rails server --port 3000 --binding 0.0.0.0 2>&1 &
+       - run:
+           name: Boot rails server
+           command: bin/rails s
+           background: true 
+ #     - run: bundle exec rails server --port 3000 --binding 0.0.0.0 2>&1 &
 #       - run:
 #          name: Waiting for Puma to be ready
 #          command: |
