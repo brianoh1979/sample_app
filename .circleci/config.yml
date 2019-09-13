@@ -31,13 +31,10 @@
        - run: bundle install     
  #      - run: bundle update --bundler
  #      - run: bundle install --path vendor/bundle
-
        - save_cache:
           key: gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
           paths:
-            - vendor/bundle
-     start: RAILS_ENV=test bundle exec rails server -p 3000
-     wait-on: 'http://localhost:3000'
+
 #        - run: netstat -an
      # Start doing the tests   
    test:
@@ -46,6 +43,8 @@
      steps:
      #  - run: bundle exec rails server --daemon
        - checkout
+  #  start: RAILS_ENV=test bundle exec rails server -p 3000
+  #   wait-on: 'http://localhost:3000'
        - restore_cache:
           keys:
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
