@@ -1,5 +1,5 @@
-describe('My First Test', function() {
-  it('Does not do much!', function() {
-    expect(true).to.equal(true)
+describe('The signin page', function() {
+  it('successfully loads', function() {
+    cy.visit('http://localhost:3000') // change URL to match your dev URL
   })
 })
