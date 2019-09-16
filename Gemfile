@@ -27,6 +27,7 @@ gem 'will_paginate', '3.1.6'
 group :development, :test do
   gem 'byebug',  '9.0.6', platform: :mri
   gem 'sqlite3', '1.3.13'
+  gem 'rspec-rails', '~> 3.8'
 end
 
 group :development do
@@ -34,6 +35,7 @@ group :development do
   gem 'spring',                '2.0.2'
   gem 'spring-watcher-listen', '2.0.1'
   gem 'web-console',           '3.5.1'
+  gem 'rspec-rails', '~> 3.8'
   #  gem 'cypress-on-rails',      '~> 1.0'
 end
 

@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-#require 'test_helper'
+require 'test_helper'
 
-#class UsersEditTest < ActionDispatch::IntegrationTest
+class UsersEditTest < ActionDispatch::IntegrationTest
   def setup
     @user = users(:michael)
   end
 
-#  test 'unsuccessful edit' do
-#    log_in_as(@user)
-#    get edit_user_path(@user)
-#    assert_template 'users/edit'
-#    patch user_path(@user), params: { user: { name: 'Invalid',
-#                                              email: 'foo@invalid',
-#                                              password: 'foo',
-#                                              password_confirmation: 'bar' } }
-#  end
+  test 'unsuccessful edit' do
+    log_in_as(@user)
+    get edit_user_path(@user)
+    assert_template 'users/edit'
+    patch user_path(@user), params: { user: { name: 'Invalid',
+                                              email: 'foo@invalid',
+                                              password: 'foo',
+                                              password_confirmation: 'bar' } }
+  end
 
   test 'successful edit' do
     log_in_as(@user)
@@ -57,4 +57,4 @@
     log_in_as(@user)
     assert_redirected_to user_url(@user)
   end
-#end
+end
