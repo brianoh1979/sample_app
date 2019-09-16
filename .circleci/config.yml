@@ -55,7 +55,7 @@
              echo $(circleci tests glob "test/integration/*_spec.rb" "test/models/*_spec.rb") 
              circleci tests glob "test/integration/*_spec.rb" "test/models/*_spec.rb" | xargs -n 1 echo           
   #     - run: TESTFILES=$(circleci tests glob "test/integration/*.rb" "test/models/*.rb" | circleci tests split --split-by=filesize)
-       - run: TESTFILES=$(circleci tests glob "test/integration/*_spec.rb" "test/models/*_spec.rb")
+       - run: TESTFILES=$(project/circleci tests glob "test/integration/*_spec.rb" "test/models/*_spec.rb" | xargs -n 1 echo)
        - run: echo $TESTFILES
        - run: bundle exec rspec -- ${TESTFILES}
        - run: rails test
