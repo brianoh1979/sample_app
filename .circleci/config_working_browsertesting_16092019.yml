@@ -3,7 +3,6 @@
    build:
      docker:
        - image: circleci/ruby:2.6.3-node-browsers
-     parallelism: 4
      steps:
        - checkout
        - run: sudo apt-get update
@@ -69,10 +68,6 @@
      #  - run: rubocop
        - run: bundle-audit check --ignore CVE-2015-7580 CVE-2015-7578 CVE-2015-7579
        - run: rails_best_practices .
-       - run:
-           command: |
-             echo $(circleci tests glob "test/integration/*" "test/models/*")
-             circleci tests glob "test/integration/*" "test/models/*" | xargs -n 1 echo
        - run: rails test
        - run: curl http://localhost:3000
        - run: # open cypress and use sample_spec.js
