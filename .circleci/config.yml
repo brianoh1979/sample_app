@@ -52,9 +52,10 @@
        - run: rails_best_practices .
        - run:
            command: |
-             echo $(circleci tests glob "test/integration/*.rb" "test/models/*.rb")
-             circleci tests glob "test/integration/*.rb" "test/models/*.rb" | xargs -n 1 echo
-       - run: TESTFILES=$(circleci tests glob "test/integration/*.rb" "test/models/*.rb" | circleci tests split --split-by=filesize)
+             echo $(circleci tests glob "test/integration/*_spec.rb" "test/models/*_spec.rb") 
+             circleci tests glob "test/integration/*_spec.rb" "test/models/*_spec.rb" | xargs -n 1 echo           
+  #     - run: TESTFILES=$(circleci tests glob "test/integration/*.rb" "test/models/*.rb" | circleci tests split --split-by=filesize)
+       - run: TESTFILES=$(circleci tests glob "test/integration/*_spec.rb" "test/models/*_spec.rb")
        - run: echo $TESTFILES
        - run: bundle exec rspec -- ${TESTFILES}
        - run: rails test
