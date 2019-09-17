@@ -28,8 +28,3 @@ node_modules/*
 /spring/*.pid
 
 # Do not commit generated files in the Coverage directory
-<<<<<<< HEAD
-coverage/*
-=======
-coverage/*
->>>>>>> fb65d33c198f337644b65bf1df00367864fabd50
