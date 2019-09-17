@@ -50,6 +50,7 @@
        - run: ps -ef | grep puma
        - run: bundle-audit check --ignore CVE-2015-7580 CVE-2015-7578 CVE-2015-7579
        - run: rails_best_practices .
+       - run: rake db:test:prepare
        - run:
            command: |
              echo $(circleci tests glob "spec/features/models/*.rb") 
