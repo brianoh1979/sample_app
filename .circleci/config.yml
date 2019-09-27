@@ -92,6 +92,9 @@
  #      - run:
  #           name: Deploy heroku app
  #           command: bash ./deploy-heroku.sh
+       - run: 
+             name: Merge from Develop branch to Master
+             command: bash ./release-production.sh
        - run:
            name: Deploy Master to Heroku
            command: |
