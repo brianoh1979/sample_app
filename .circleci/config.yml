@@ -64,8 +64,8 @@
        - run: curl http://localhost:3000
        - run: # open cypress and use sample_spec.js
           name: run
-          command: $(npm bin)/cypress run -- --record --spec "cypress/integration/sample_spec.js"
-     #  - run: # run coverage report
+          command: $(npm bin)/cypress run -- --record --spec "cypress/integration/sample_spec.js" --reporter junit \ --reporter-options "mochaFile=coverage/my-test-output.xml,toConsole=true"
+     #  If any problems with the above, remove everything after --reporter
      #     name: code-coverage
      #     command: './node_modules/.bin/nyc report --reporter=text-lcov'
 #       - store_artifacts: # special step to save test results as as artifact
@@ -92,9 +92,9 @@
  #      - run:
  #           name: Deploy heroku app
  #           command: bash ./deploy-heroku.sh
-       - run: 
-             name: Merge from Develop branch to Master
-             command: bash ./release-production.sh
+ #      - run: 
+ #            name: Merge from Develop branch to Master
+ #            command: bash ./release-production.sh
        - run:
            name: Deploy Master to Heroku
            command: |
