@@ -130,11 +130,24 @@
    build_and_test:
      jobs:
        - build
-       - unittest
-       - browsertest
-       - lintertest
-       - codecoveragetest
-       - deploy
+       - unittest:
+           requires:
+             - build
+       - browsertest:
+           requires:
+             - build
+       - lintertest:
+           requires:
+             - build
+       - codecoveragetest:
+           requires:
+             - build
+       - deploy:
+           requires:
+             - unittest
+             - browsertest
+             - lintertest
+             - codecoveragetest
 #            filters:
 #              branches:
 #                only: master
