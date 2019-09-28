@@ -10,12 +10,12 @@
      steps:
        - checkout
        - run: sudo apt-get update
-       - run:
-          name: Install Cypress dependencies
-          command: sudo apt-get install xvfb libgtk-3-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 --fix-missing
-       - run:
-          name: install cypress
-          command: npm install cypress --save-dev
+#       - run:
+#          name: Install Cypress dependencies
+#          command: sudo apt-get install xvfb libgtk-3-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 --fix-missing
+#       - run:
+#          name: install cypress
+#          command: npm install cypress --save-dev
        - run:
           name: install dependencies
           command: |
@@ -48,7 +48,8 @@
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
        - run: gem install bundler:2.0.1
-       - run: bundle update --bundler 
+       - run: bundle update --bundler
+       - run: rake db:test:prepare 
        - run:
            command: |
              echo $(circleci tests glob "spec/features/models/*.rb") 
@@ -71,6 +72,12 @@
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
+       - run:
+          name: Install Cypress dependencies
+          command: sudo apt-get install xvfb libgtk-3-dev libnotify-dev libgcon$
+       - run:
+          name: install cypress
+          command: npm install cypress --save-dev
        - run: gem install bundler:2.0.1
        - run: bundle update --bundler
        - run:
