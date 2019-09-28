@@ -3,6 +3,8 @@
    build:
      docker:
        - image: circleci/ruby:2.6.3-node-browsers
+         environment:
+           BUNDLER_VERSION: 2.0.1
      #parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
@@ -34,6 +36,8 @@
    unittest:
      docker:
        - image: circleci/ruby:2.6.3-node-browsers
+         environment:
+           BUNDLER_VERSION: 2.0.1
      parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
@@ -55,6 +59,8 @@
    browsertest:
      docker:
        - image: circleci/ruby:2.6.3-node-browsers
+         environment:
+           BUNDLER_VERSION: 2.0.1
      #parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
@@ -80,6 +86,8 @@
    lintertest:
      docker:
        - image: circleci/ruby:2.6.3-node-browsers
+         environment:
+           BUNDLER_VERSION: 2.0.1
      #parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
@@ -96,6 +104,8 @@
    codecoveragetest:
      docker:
        - image: circleci/ruby:2.6.3-node-browsers
+         environment:
+           BUNDLER_VERSION: 2.0.1
      #parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
@@ -115,6 +125,8 @@
    deploy:
      docker:
        - image: circleci/ruby:2.6.3-node-browsers
+         environment:
+           BUNDLER_VERSION: 2.0.1
      #parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
