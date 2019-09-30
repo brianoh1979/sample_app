@@ -87,6 +87,9 @@
        - run: # open cypress and use sample_spec.js
           name: run
           command: $(npm bin)/cypress run -- --record --spec "cypress/integration/sample_spec.js" --reporter junit \ --reporter-options "mochaFile=XML/my-test-output.xml,toConsole=true"
+       - store_artifacts: # for display in Artifacts: https://circleci.com/docs$
+          path: coverage
+          prefix: coverage
    #Linters and static code analysis
    lintertest:
      docker:
