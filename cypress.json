@@ -5,7 +5,7 @@
   "pageLoadTimeout": 180000,
   "reporter": "junit",
   "reporterOptions": {
-    "mochaFile": "results/my-test-output-[hash].xml",
+    "mochaFile": "/tmp/results/my-test-output-[hash].xml",
     "toConsole": true
   }
 }
