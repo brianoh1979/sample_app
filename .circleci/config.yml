@@ -34,7 +34,7 @@
      steps:
      - run: curl -Is https://thawing-cliffs-50633.herokuapp.com | head -1
  
-workflows:
+ workflows:
    version: 2
    build_and_test:
      jobs:
