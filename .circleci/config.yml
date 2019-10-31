@@ -10,25 +10,31 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-       - run:
-           name: Deploy Master to Heroku
-           command: |
-             git push https://heroku:$HEROKU_API_KEY@git.heroku.com/thawing-cliffs-50633.git master
-             curl -v -X POST https://circleci.com/api/v1/project/templth/restlet-client-circleci/tree/master?circle-token=$CIRCLE_TOKEN      
+ #      - run:
+ #          name: Deploy Master to Heroku
+ #          command: |
+ #            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/thawing-cliffs-50633.git master
+ #            curl -v -X POST https://circleci.com/api/v1/project/templth/restlet-client-circleci/tree/master?circle-token=$CIRCLE_TOKEN      
  
-#       - deploy:
-#          name: conditionally run a deploy job
-#          command: |
-#            # replace this with your build/deploy check (i.e. current branch is$
-#            if [[ $CIRCLE_BRANCH = "master" ]]; then
-#              curl --user ${CIRCLE_API_USER_TOKEN}: \
-#              '\n%{http_code}' -X GET https://thawing-cliffs-50633.herokuapp.com/)
-#                --data build_parameters[CIRCLE_JOB]=deploy_docker \
-#                --data revision=$CIRCLE_SHA1 \
-#                https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_US$
-#            fi
+       - deploy:
+           name: conditionally run a deploy job
+           command: |
+            # replace this with your build/deploy check (i.e. current branch is "release")
+             if [[ true ]]; then
+               curl --user ${CIRCLE_API_USER_TOKEN}: \
+                 --data build_parameters[CIRCLE_JOB]=deploy_docker \
+                 --data revision=$CIRCLE_SHA1 \
+                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/tree/$CIRCLE_BRANCH
+             fi
 
- workflows:
+   deploy_docker:
+     docker:
+       - image: ruby:2.4.0-jessie
+     working_directory: /
+     steps:
+     - run: curl -Is https://thawing-cliffs-50633.herokuapp.com | head -1
+ 
+workflows:
    version: 2
    build_and_test:
      jobs:
