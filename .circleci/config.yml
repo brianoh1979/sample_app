@@ -33,7 +33,15 @@
          environment:
            BUNDLER_VERSION: 2.0.1
      steps:
-     - run: curl -Is https://thawing-cliffs-50633.herokuapp.com | head -1
+     - test: 
+       name: Check if website returns a 500
+       command: | 
+         curl -Is https://thawing-cliffs-50633.herokuapp.com | head -1
+         if [ 200 -eq $? ]; then 
+         echo "Website can be reached"
+         else 
+         echo "Website is returning a 500"
+         fi
 #     - run: curl -X https://thawing-cliffs-50633.herokuapp.com 
 
  workflows:
