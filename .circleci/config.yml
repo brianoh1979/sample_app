@@ -20,7 +20,7 @@
            name: conditionally run a deploy job
            command: |
             # replace this with your build/deploy check (i.e. current branch is "release")
-             if [[ true ]]; then
+             if [[ $CIRCLE_BRANCH = "develop" ]]; then
                curl --user ${CIRCLE_API_USER_TOKEN}: \
                  --data build_parameters[CIRCLE_JOB]=deploy_docker \
                  --data revision=$CIRCLE_SHA1 \
@@ -29,11 +29,13 @@
 
    deploy_docker:
      docker:
-       - image: ruby:2.4.0-jessie
-     working_directory: /
+       - image: circleci/ruby:2.6.3-node-browsers
+         environment:
+           BUNDLER_VERSION: 2.0.1
      steps:
-     - run: curl -Is https://thawing-cliffs-50633.herokuapp.com | head -1
- 
+#     - run: curl -Is https://thawing-cliffs-50633.herokuapp.com | head -1
+     - run: curl -X https://thawing-cliffs-50633.herokuapp.com 
+
  workflows:
    version: 2
    build_and_test:
