@@ -13,14 +13,8 @@
        - run: sudo apt-get update
        - run: exit 0
        - slack/notify:
- #          fail_only: false
- #          mentions: 'USERID1,USERID2'
- #          only_for_branches: develop
- #          webhook: webhook
- #          channel: CQ4NHT0DC
-           channel: UKLBZART9
+           channel: CQ4NHT0DC
            color: '#42e2f4'
- #          mentions: 'brianoh,'
            message: This is a custom orb message notification that job worked
            webhook: '${SLACK_WEBHOOK}'
 # orbs:
