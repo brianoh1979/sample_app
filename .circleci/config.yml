@@ -1,5 +1,5 @@
 #This is my config file for CircleCI
- version: 2
+ version: 2.1
  jobs:
    build:
      docker:
@@ -10,202 +10,49 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-       - run: sudo apt-get update
-       - run:
-          name: install dependencies
-          command: |
-            gem update --system
-            gem install bundler
-       # Below step should kick in from second run onwards
-       - restore_cache:
-          keys:
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}
-            - gem-cache-v1
-       - run: bundle install     
-       - save_cache:
-          key: gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-          paths:
-          - vendor/bundle
-   #Start of the Unit Testing
-   unittest:
-     docker:
-       - image: circleci/ruby:2.6.3-node-browsers
-         environment:
-           BUNDLER_VERSION: 2.0.1
-     parallelism: 4
-     #Above runs the tests across four containers instead of one
-     steps:
-       - checkout
-       - restore_cache:
-          keys:
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}
-            - gem-cache-v1
-       - run: gem install bundler:2.0.1
-       - run: bundle update --bundler
-       - run: rake db:test:prepare 
-       - run:
-           command: |
-             echo $(circleci tests glob "spec/features/models/*.rb") 
-             circleci tests glob "spec/features/models/*.rb" | xargs -n 1 echo           
-       - run: TESTFILES=$(circleci tests glob "spec/features/models/*.rb" | circleci tests split --split-by=filesize)
-       - run: echo $TESTFILES
-       - run: bundle exec rspec -- ${TESTFILES}
-   #Start of Browser testing
-   browsertest:
-     docker:
-       - image: circleci/ruby:2.6.3-node-browsers
-         environment:
-           BUNDLER_VERSION: 2.0.1
-     #parallelism: 4
-     #Above runs the tests across four containers instead of one
-     steps:
-       - checkout
-       - restore_cache:
-          keys:
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}
-            - gem-cache-v1
-       - run: sudo apt-get update
-       - run:
-          name: Install Cypress dependencies
-          command: sudo apt-get install xvfb libgtk-3-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 --fix-missing
-       - run:
-          name: install cypress
-          command: npm install cypress --save-dev
-       - run: gem install bundler:2.0.1
-       - run: bundle update --bundler
-       - run:
-           name: Boot rails server
-           command: bin/rails s
-           background: true
-       - run: mkdir /tmp/results
-       - run: npm install --save-dev mocha mochawesome mochawesome-merge mochawesome-report-generator
-       - run: # open cypress and use sample_spec.js
-          name: run
-  #        command: $(npm bin)/cypress run -- --record --spec "cypress/integration/sample_spec.js" --reporter junit \ --reporter-options "mochaFile=XML/my-test-output.xml,toConsole=true"
-          command: $(npm bin)/cypress run -- --record --spec "cypress/integration/sample_spec.js" 
-       - store_test_results:
-           path: /tmp/results
-       - store_artifacts:
-           path: /tmp/results
-           destination: results
-  #     - store_artifacts: # for display in Artifacts: https://circleci.com/docs$
-  #        path: /XML
-   #Linters and static code analysis
-   lintertest:
-     docker:
-       - image: circleci/ruby:2.6.3-node-browsers
-         environment:
-           BUNDLER_VERSION: 2.0.1
-     #parallelism: 4
-     #Above runs the tests across four containers instead of one
-     steps:
-       - checkout
-       - restore_cache:
-          keys:
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}
-            - gem-cache-v1
-       - run: gem install bundler:2.0.1
-       - run: bundle update --bundler
-       - run: bundle-audit check --ignore CVE-2015-7580 CVE-2015-7578 CVE-2015-7579
-       - run: rails_best_practices .
-   #Code Coverage
-   codecoveragetest:
-     docker:
-       - image: circleci/ruby:2.6.3-node-browsers
-         environment:
-           BUNDLER_VERSION: 2.0.1
-     #parallelism: 4
-     #Above runs the tests across four containers instead of one
-     steps:
-       - checkout
-       - restore_cache:
-          keys:
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}
-            - gem-cache-v1
-       - run: gem install bundler:2.0.1
-       - run: bundle update --bundler
-       - run: rake db:test:prepare
-       - run: rails test
-       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
-          path: coverage
-          prefix: coverage
-    #Deploy job
-   deploy:
-     docker:
-       - image: circleci/ruby:2.6.3-node-browsers
-         environment:
-           BUNDLER_VERSION: 2.0.1
-     #parallelism: 4
-     #Above runs the tests across four containers instead of one
-     steps:
-       - checkout
-       - restore_cache:
-          keys:
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}
-            - gem-cache-v1
-       - run:
-           name: Deploy Master to Heroku
-           command: |
-             git push https://heroku:$HEROKU_API_KEY@git.heroku.com/thawing-cliffs-50633.git master
-
+ 
        - deploy:
            name: conditionally run a deploy job
            command: |
             # replace this with your build/deploy check (i.e. current branch is "release")
-             if [[ $CIRCLE_BRANCH = "master" ]]; then
+             if [[ $CIRCLE_BRANCH = "develop" ]]; then
                curl --user ${CIRCLE_API_USER_TOKEN}: \
                  --data build_parameters[CIRCLE_JOB]=deploy_docker \
                  --data revision=$CIRCLE_SHA1 \
                  https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/tree/$CIRCLE_BRANCH
-             fi 
+             fi
 
    deploy_docker:
      docker:
        - image: circleci/ruby:2.6.3-node-browsers
          environment:
            BUNDLER_VERSION: 2.0.1
+
      steps:
-     - run:
+     - run: 
         name: Check if website returns a 500
-        command: |
-          response=$(curl -Is https://thawing-cliffs-50633.herokuapp.com | head -1)
+        command: | 
+          response=$(curl -Is https://thawing-cliffs-50633.herokuapp.com/brian | head -1)
           echo ${response}
-          if [[ ${response} == *200* ]]; then
+          if [[ ${response} == *200* ]]; then 
           echo "Website can be reached"
-          else
+          else 
           echo "Website is returning a 500"
           fi
+      
+     - run: exit 0
+     - slack/status:
+         fail_only: true
+         mentions: 'USERID1,USERID2'
+         only_for_branches: only_for_branches
+         webhook: webhook
+ orbs:
+   slack: circleci/slack@x.y.z
+ version: 2.1
 
  workflows:
    version: 2
    build_and_test:
      jobs:
        - build
-       - unittest:
-           requires:
-             - build
-       - browsertest:
-           requires:
-             - build
-       - lintertest:
-           requires:
-             - build
-       - codecoveragetest:
-           requires:
-             - build
-       - deploy:
-           requires:
-             - unittest
-             - browsertest
-             - lintertest
-             - codecoveragetest
-           filters:
-             branches:
-               only: master
 
