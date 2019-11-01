@@ -1,6 +1,6 @@
 
 #This is my config file for CircleCI
-# version: 2
+ version: 2
  jobs:
    build:
      docker:
@@ -12,12 +12,6 @@
      steps:
        - checkout
        - run: sudo apt-get update
-       - run: exit 0
-       - slack/notify:
-           channel: CQ4NHT0DC
-           color: '#42e2f4'
-           message: This is a custom orb message notification that job worked
-           webhook: '${SLACK_WEBHOOK}'
        - run:
           name: install dependencies
           command: |
@@ -188,10 +182,6 @@
           else
           echo "Website is returning a 500"
           fi
-
- orbs:
-   slack: circleci/slack@3.4.1
- version: 2.1
 
  workflows:
    version: 2
