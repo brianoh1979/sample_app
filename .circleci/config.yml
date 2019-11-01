@@ -36,7 +36,7 @@
      - run: 
         name: Check if website returns a 500
         command: | 
-          response=$(curl -Is https://thawing-cliffs-50633.herokuapp.com/brian | head -1)
+          response=$(curl -Is https://thawing-cliffs-50633.herokuapp.com | head -1)
           echo "${response}"
           if [ "${response}" == "HTTP/1.1 200 OK" ]; then 
           echo "Website can be reached"
