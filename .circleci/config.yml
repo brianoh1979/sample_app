@@ -37,7 +37,7 @@
         name: Check if website returns a 500
         command: | 
           curl -Is https://thawing-cliffs-50633.herokuapp.com | head -1
-          if [ 200 -eq $? ]; then 
+          if [ 0 -eq $? ]; then 
           echo "Website can be reached"
           else 
           echo "Website is returning a 500"
