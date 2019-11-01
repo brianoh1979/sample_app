@@ -17,7 +17,8 @@
  #          mentions: 'USERID1,USERID2'
  #          only_for_branches: develop
  #          webhook: webhook
-           channel: CQ4NHT0DC
+ #          channel: CQ4NHT0DC
+           channel: UKLBZART9
            color: '#42e2f4'
  #          mentions: 'brianoh,'
            message: This is a custom orb message notification that job worked
