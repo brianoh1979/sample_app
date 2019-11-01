@@ -33,7 +33,7 @@
          environment:
            BUNDLER_VERSION: 2.0.1
      steps:
-     - test: 
+     - run: 
        name: Check if website returns a 500
        command: | 
          curl -Is https://thawing-cliffs-50633.herokuapp.com | head -1
