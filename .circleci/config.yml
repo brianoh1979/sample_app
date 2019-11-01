@@ -38,7 +38,7 @@
         command: | 
           response=$(curl -Is https://thawing-cliffs-50633.herokuapp.com | head -1)
           echo "${response}"
-          if [ "${response}" == *"200"* ]; then 
+          if [ "${response}" == *200* ]; then 
           echo "Website can be reached"
           else 
           echo "Website is returning a 500"
