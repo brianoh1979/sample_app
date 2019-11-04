@@ -48,6 +48,9 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
+       - run: apt-get update
+       - run: apt-get install sudo
+       - run: sudo apt-get update
        - restore_cache:
           keys:
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
@@ -74,6 +77,9 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
+       - run: apt-get update
+       - run: apt-get install sudo
+       - run: sudo apt-get update
        - restore_cache:
           keys:
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
@@ -116,6 +122,9 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
+       - run: apt-get update
+       - run: apt-get install sudo
+       - run: sudo apt-get update
        - restore_cache:
           keys:
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
@@ -136,6 +145,9 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
+       - run: apt-get update
+       - run: apt-get install sudo
+       - run: sudo apt-get update
        - restore_cache:
           keys:
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
@@ -159,6 +171,9 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
+       - run: apt-get update
+       - run: apt-get install sudo
+       - run: sudo apt-get update
        - restore_cache:
           keys:
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
