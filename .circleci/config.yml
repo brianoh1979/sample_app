@@ -1,5 +1,5 @@
 
-#This is my config file for CircleCI - all onboarding asks present
+#This is my config file for CircleCI - all onboarding objectives present
 # version: 2
  jobs:
    build:
