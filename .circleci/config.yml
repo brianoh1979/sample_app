@@ -86,7 +86,7 @@
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
-       - run: sudo apt-get update
+       - run: sudo apt-get install -y npm
        - run: sudo apt-get install -y nodejs
        - run:
           name: Install Cypress dependencies
