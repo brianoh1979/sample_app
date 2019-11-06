@@ -21,11 +21,11 @@
            color: '#42e2f4'
            message: This is a custom orb message notification that job worked
            webhook: '${SLACK_WEBHOOK}'
- #      - run:
- #         name: install dependencies
- #         command: |
- #           gem update --system
- #           gem install bundler
+       - run:
+          name: install dependencies
+          command: |
+            gem update --system
+            gem install bundler
        # Below step should kick in from second run onwards
        - restore_cache:
           keys:
