@@ -15,17 +15,18 @@
        - run: apt-get update
        - run: apt-get install sudo
        - run: sudo apt-get update
+       - run: bundle update --bundler
        - run: exit 0
        - slack/notify:
            channel: CQ4NHT0DC
            color: '#42e2f4'
            message: This is a custom orb message notification that job worked
            webhook: '${SLACK_WEBHOOK}'
-       - run:
-          name: install dependencies
-          command: |
-            gem update --system
-            gem install -y bundler
+#       - run:
+#          name: install dependencies
+#          command: |
+#            gem update --system
+#            gem install -y bundler
        # Below step should kick in from second run onwards
        - restore_cache:
           keys:
