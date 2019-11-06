@@ -25,7 +25,7 @@
           name: install dependencies
           command: |
             gem update --system
-            gem install bundler
+            gem install -y bundler
        # Below step should kick in from second run onwards
        - restore_cache:
           keys:
