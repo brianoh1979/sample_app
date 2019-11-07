@@ -1,33 +1,28 @@
 
-#This is my config file for CircleCI - all onboarding objectives present
- version: 2
+#This is my config file for CircleCI
+# version: 2
  jobs:
    build:
      docker:
-#       - image: circleci/ruby:2.6.3-node-browsers
-       - image: brianoh1979/bohruby:ruby263
-#         environment:
-#           BUNDLER_VERSION: 2.0.1
+       - image: circleci/ruby:2.6.3-node-browsers
+         environment:
+           BUNDLER_VERSION: 2.0.1
      #parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-       - run: apt-get update
-       - run: apt-get install sudo
        - run: sudo apt-get update
- #      - run: bundle update --bundler
- #      - run: exit 0
- #      - slack/notify:
- #          channel: CQ4NHT0DC
- #          color: '#42e2f4'
- #          message: This is a custom orb message notification that job worked
- #          webhook: '${SLACK_WEBHOOK}'
+       - run: exit 0
+       - slack/notify:
+           channel: CQ4NHT0DC
+           color: '#42e2f4'
+           message: This is a custom orb message notification that job worked
+           webhook: '${SLACK_WEBHOOK}'
        - run:
           name: install dependencies
           command: |
-            gem install bundler -v 2.0.2
             gem update --system
-            bundle update --bundler
+            gem install bundler
        # Below step should kick in from second run onwards
        - restore_cache:
           keys:
@@ -42,19 +37,13 @@
    #Start of the Unit Testing
    unittest:
      docker:
-  #     - image: circleci/ruby:2.6.3-node-browsers
-       - image: brianoh1979/bohruby:ruby263
-  #       environment:
-  #         BUNDLER_VERSION: 2.0.1
+       - image: circleci/ruby:2.6.3-node-browsers
+         environment:
+           BUNDLER_VERSION: 2.0.1
      parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-       - run: apt-get update
-       - run: apt-get install sudo
-       - run: sudo apt-get update
-       - run: sudo apt-get install -y nodejs
-       - run: sudo apt-get install -y tzdata
        - restore_cache:
           keys:
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
@@ -73,46 +62,25 @@
    #Start of Browser testing
    browsertest:
      docker:
- #      - image: circleci/ruby:2.6.3-node-browsers
-       - image: brianoh1979/bohruby:ruby263  
- #      environment:
- #          BUNDLER_VERSION: 2.0.1
+       - image: circleci/ruby:2.6.3-node-browsers
+         environment:
+           BUNDLER_VERSION: 2.0.1
      #parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-       - run: apt-get update
-       - run: apt-get install sudo
-       - run: sudo apt-get update
-       - run: sudo apt-get upgrade -y  
-       - run: sudo apt-get install apt-transport-https
-#       - run:
-#          name: install dependencies
-#          command: |
-#            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-#            echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-#            sudo apt-get update
-#            sudo apt-get install -y yarn
        - restore_cache:
           keys:
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
-       - run: curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-       - run: sudo apt-get install -y nodejs
-       - run: sudo apt-get install -y tzdata
-#       - run: sudo apt-get install -y npm
-#       - run: sudo apt-get install -y nodejs-legacy
-#       - run: npm install -g npm@latest
+       - run: sudo apt-get update
        - run:
           name: Install Cypress dependencies
-          command: sudo apt-get -y install xvfb libgtk-3-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 --fix-missing
+          command: sudo apt-get install xvfb libgtk-3-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 --fix-missing
        - run:
           name: install cypress
           command: npm install cypress --save-dev
-  #     - run:
-   #       name: install cypress
-   #       command: yarn add cypress --dev
        - run: gem install bundler:2.0.1
        - run: bundle update --bundler
        - run:
@@ -135,17 +103,13 @@
    #Linters and static code analysis
    lintertest:
      docker:
-       - image: brianoh1979/bohruby:ruby263
- #      - image: circleci/ruby:2.6.3-node-browsers
- #        environment:
- #          BUNDLER_VERSION: 2.0.1
+       - image: circleci/ruby:2.6.3-node-browsers
+         environment:
+           BUNDLER_VERSION: 2.0.1
      #parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-       - run: apt-get update
-       - run: apt-get install sudo
-       - run: sudo apt-get update
        - restore_cache:
           keys:
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
@@ -158,19 +122,13 @@
    #Code Coverage
    codecoveragetest:
      docker:
-       - image: brianoh1979/bohruby:ruby263
-  #     - image: circleci/ruby:2.6.3-node-browsers
-  #       environment:
-  #         BUNDLER_VERSION: 2.0.1
+       - image: circleci/ruby:2.6.3-node-browsers
+         environment:
+           BUNDLER_VERSION: 2.0.1
      #parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-       - run: apt-get update
-       - run: apt-get install sudo
-       - run: sudo apt-get update
-       - run: sudo apt-get install -y nodejs
-       - run: sudo apt-get install -y tzdata
        - restore_cache:
           keys:
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
@@ -186,17 +144,13 @@
     #Deploy job
    deploy:
      docker:
-       - image: brianoh1979/bohruby:ruby263
-  #     - image: circleci/ruby:2.6.3-node-browsers
-  #       environment:
-  #         BUNDLER_VERSION: 2.0.1
+       - image: circleci/ruby:2.6.3-node-browsers
+         environment:
+           BUNDLER_VERSION: 2.0.1
      #parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-       - run: apt-get update
-       - run: apt-get install sudo
-       - run: sudo apt-get update
        - restore_cache:
           keys:
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
@@ -220,10 +174,9 @@
 
    deploy_docker:
      docker:
- #      - image: circleci/ruby:2.6.3-node-browsers
-       - image: brianoh1979/bohruby:ruby263
- #        environment:
- #          BUNDLER_VERSION: 2.0.1
+       - image: circleci/ruby:2.6.3-node-browsers
+         environment:
+           BUNDLER_VERSION: 2.0.1
      steps:
      - run:
         name: Check if website returns a 500
@@ -236,9 +189,9 @@
           echo "Website is returning a 500"
           fi
 
-# orbs:
-#   slack: circleci/slack@3.4.1
-# version: 2.1
+ orbs:
+   slack: circleci/slack@3.4.1
+ version: 2.1
 
  workflows:
    version: 2
@@ -267,4 +220,3 @@
              branches:
                only: master
 
-         
