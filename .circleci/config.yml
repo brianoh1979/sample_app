@@ -1,6 +1,6 @@
 
 #This is my config file for CircleCI - all onboarding objectives present
-# version: 2
+ version: 2
  jobs:
    build:
      docker:
@@ -16,12 +16,12 @@
        - run: apt-get install sudo
        - run: sudo apt-get update
  #      - run: bundle update --bundler
-       - run: exit 0
-       - slack/notify:
-           channel: CQ4NHT0DC
-           color: '#42e2f4'
-           message: This is a custom orb message notification that job worked
-           webhook: '${SLACK_WEBHOOK}'
+ #      - run: exit 0
+ #      - slack/notify:
+ #          channel: CQ4NHT0DC
+ #          color: '#42e2f4'
+ #          message: This is a custom orb message notification that job worked
+ #          webhook: '${SLACK_WEBHOOK}'
        - run:
           name: install dependencies
           command: |
@@ -220,9 +220,10 @@
 
    deploy_docker:
      docker:
-       - image: circleci/ruby:2.6.3-node-browsers
-         environment:
-           BUNDLER_VERSION: 2.0.1
+ #      - image: circleci/ruby:2.6.3-node-browsers
+       - image: brianoh1979/bohruby:ruby263
+ #        environment:
+ #          BUNDLER_VERSION: 2.0.1
      steps:
      - run:
         name: Check if website returns a 500
@@ -235,9 +236,9 @@
           echo "Website is returning a 500"
           fi
 
- orbs:
-   slack: circleci/slack@3.4.1
- version: 2.1
+# orbs:
+#   slack: circleci/slack@3.4.1
+# version: 2.1
 
  workflows:
    version: 2
