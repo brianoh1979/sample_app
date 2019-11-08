@@ -12,6 +12,8 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
+       - setup_remote_docker:
+         docker_layer_caching: true
        - run: apt-get update
  #      - run: apt-get install sudo
        - run: sudo apt-get update
