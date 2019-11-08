@@ -13,7 +13,7 @@
      steps:
        - checkout
        - run: apt-get update
- #      - run: apt-get install sudo
+       - run: apt-get install sudo
        - run: sudo apt-get update
  #      - run: bundle update --bundler
  #      - run: exit 0
