@@ -12,8 +12,8 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-       - setup_remote_docker:
-          docker_layer_caching: true
+#       - setup_remote_docker:
+#          docker_layer_caching: true
        - run: apt-get update
  #      - run: apt-get install sudo
        - run: sudo apt-get update
@@ -53,7 +53,7 @@
      steps:
        - checkout
        - run: apt-get update
-       - run: apt-get install sudo
+ #      - run: apt-get install sudo
        - run: sudo apt-get update
        - run: sudo apt-get install -y nodejs
        - run: sudo apt-get install -y tzdata
@@ -84,7 +84,7 @@
      steps:
        - checkout
        - run: apt-get update
-       - run: apt-get install sudo
+  #     - run: apt-get install sudo
        - run: sudo apt-get update
        - run: sudo apt-get upgrade -y  
        - run: sudo apt-get install apt-transport-https
@@ -146,7 +146,7 @@
      steps:
        - checkout
        - run: apt-get update
-       - run: apt-get install sudo
+   #    - run: apt-get install sudo
        - run: sudo apt-get update
        - restore_cache:
           keys:
@@ -169,7 +169,7 @@
      steps:
        - checkout
        - run: apt-get update
-       - run: apt-get install sudo
+    #   - run: apt-get install sudo
        - run: sudo apt-get update
        - run: sudo apt-get install -y nodejs
        - run: sudo apt-get install -y tzdata
