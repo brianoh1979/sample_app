@@ -51,7 +51,7 @@
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
 #       - run: gem install bundler:2.0.1
-#       - run: bundle update --bundler
+       - run: bundle update --bundler
        - run: rake db:test:prepare 
        - run:
            command: |
