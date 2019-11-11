@@ -8,17 +8,6 @@
        - image: brianoh1979/bohruby:ruby263
      steps:
        - checkout
-       - run: echo "Hello world"
-   deploy:
-     docker:
-       - image: brianoh1979/bohruby:ruby263
-  #     - image: circleci/ruby:2.6.3-node-browsers
-  #       environment:
-  #         BUNDLER_VERSION: 2.0.1
-     #parallelism: 4
-     #Above runs the tests across four containers instead of one
-     steps:
-       - checkout
        - run: echo "About to cancel build"
        - deploy:
            name: conditionally run a deploy job
