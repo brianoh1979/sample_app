@@ -16,7 +16,7 @@
                curl --user ${CIRCLE_API_USER_TOKEN}: \
                  --data build_parameters[CIRCLE_JOB]=deploy_docker \
                  --data revision=$CIRCLE_SHA1 \
-                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/566/retry
+                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/575/cancel
    deploy_docker:
      docker:
  #      - image: circleci/ruby:2.6.3-node-browsers
