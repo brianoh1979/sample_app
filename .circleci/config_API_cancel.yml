@@ -1,0 +1,54 @@
+
+#This is my config file for CircleCI - all onboarding objectives present
+ version: 2
+ jobs:
+   build:
+     docker:
+       - image: brianoh1979/bohruby:ruby263
+     steps:
+       - checkout
+       - run: echo "About to cancel workflow"
+       - deploy:
+           name: conditionally run a deploy job
+           command: |
+            # replace this with your build/deploy check (i.e. current branch is "release")
+               curl --user ${CIRCLE_API_USER_TOKEN}: \
+                 --data build_parameters[CIRCLE_JOB]=deploy_docker \
+                 --data revision=$CIRCLE_SHA1 \
+                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/590/cancel
+       - deploy:
+           name: conditionally run a deploy job
+           command: |
+            # replace this with your build/deploy check (i.e. current branch is "release")
+               curl --user ${CIRCLE_API_USER_TOKEN}: \
+                 --data build_parameters[CIRCLE_JOB]=deploy_docker \
+                 --data revision=$CIRCLE_SHA1 \
+                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/591/cancel
+       - deploy:
+           name: conditionally run a deploy job
+           command: |
+            # replace this with your build/deploy check (i.e. current branch is "release")
+               curl --user ${CIRCLE_API_USER_TOKEN}: \
+                 --data build_parameters[CIRCLE_JOB]=deploy_docker \
+                 --data revision=$CIRCLE_SHA1 \
+                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/592/cancel
+       - deploy:
+           name: conditionally run a deploy job
+           command: |
+            # replace this with your build/deploy check (i.e. current branch is "release")
+               curl --user ${CIRCLE_API_USER_TOKEN}: \
+                 --data build_parameters[CIRCLE_JOB]=deploy_docker \
+                 --data revision=$CIRCLE_SHA1 \
+                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/593/cancel
+
+   deploy_docker:
+     docker:
+ #      - image: circleci/ruby:2.6.3-node-browsers
+       - image: brianoh1979/bohruby:ruby263
+ #        environment:
+ #          BUNDLER_VERSION: 2.0.1
+     steps:
+     - run: echo "Workflow cancelled"
+
+
+         
