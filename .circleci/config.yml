@@ -17,7 +17,7 @@
                curl --user ${CIRCLE_API_USER_TOKEN}: \
                  --data build_parameters[CIRCLE_JOB]=deploy_docker \
                  --data revision=$CIRCLE_SHA1 \
-                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/620/cancel
+                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/623/cancel
        - deploy:
            name: conditionally run a deploy job
            command: |
@@ -25,7 +25,7 @@
                curl --user ${CIRCLE_API_USER_TOKEN}: \
                  --data build_parameters[CIRCLE_JOB]=deploy_docker \
                  --data revision=$CIRCLE_SHA1 \
-                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/617/cancel
+                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/624/cancel
        - deploy:
            name: conditionally run a deploy job
            command: |
@@ -33,7 +33,7 @@
                curl --user ${CIRCLE_API_USER_TOKEN}: \
                  --data build_parameters[CIRCLE_JOB]=deploy_docker \
                  --data revision=$CIRCLE_SHA1 \
-                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/618/cancel
+                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/625/cancel
        - deploy:
            name: conditionally run a deploy job
            command: |
@@ -41,7 +41,7 @@
                curl --user ${CIRCLE_API_USER_TOKEN}: \
                  --data build_parameters[CIRCLE_JOB]=deploy_docker \
                  --data revision=$CIRCLE_SHA1 \
-                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/619/cancel
+                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/626/cancel
 
    deploy_docker:
      macos:
