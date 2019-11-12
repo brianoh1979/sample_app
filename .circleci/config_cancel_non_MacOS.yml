@@ -3,10 +3,8 @@
  version: 2
  jobs:
    build:
-#     docker:
-#       - image: brianoh1979/bohruby:ruby263
-     macos:
-      xcode: "11.1.0"
+     docker:
+       - image: brianoh1979/bohruby:ruby263
      steps:
        - checkout
        - run: echo "About to cancel workflow"
@@ -17,7 +15,7 @@
                curl --user ${CIRCLE_API_USER_TOKEN}: \
                  --data build_parameters[CIRCLE_JOB]=deploy_docker \
                  --data revision=$CIRCLE_SHA1 \
-                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/616/cancel
+                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/608/cancel
        - deploy:
            name: conditionally run a deploy job
            command: |
@@ -25,7 +23,7 @@
                curl --user ${CIRCLE_API_USER_TOKEN}: \
                  --data build_parameters[CIRCLE_JOB]=deploy_docker \
                  --data revision=$CIRCLE_SHA1 \
-                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/617/cancel
+                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/609/cancel
        - deploy:
            name: conditionally run a deploy job
            command: |
@@ -33,7 +31,7 @@
                curl --user ${CIRCLE_API_USER_TOKEN}: \
                  --data build_parameters[CIRCLE_JOB]=deploy_docker \
                  --data revision=$CIRCLE_SHA1 \
-                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/618/cancel
+                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/610/cancel
        - deploy:
            name: conditionally run a deploy job
            command: |
@@ -41,14 +39,12 @@
                curl --user ${CIRCLE_API_USER_TOKEN}: \
                  --data build_parameters[CIRCLE_JOB]=deploy_docker \
                  --data revision=$CIRCLE_SHA1 \
-                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/619/cancel
+                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/611/cancel
 
    deploy_docker:
-     macos:
-      xcode: "11.1.0"
- #    docker:
+     docker:
  #      - image: circleci/ruby:2.6.3-node-browsers
- #      - image: brianoh1979/bohruby:ruby263
+       - image: brianoh1979/bohruby:ruby263
  #        environment:
  #          BUNDLER_VERSION: 2.0.1
      steps:
