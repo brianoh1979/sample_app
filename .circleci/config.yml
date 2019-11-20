@@ -1,58 +1,27 @@
-
-#This is my config file for CircleCI - all onboarding objectives present - running this as test
  version: 2
  jobs:
-   build:
-#     docker:
-#       - image: brianoh1979/bohruby:ruby263
+   lint_and_test:
      macos:
-      xcode: "11.1.0"
+       xcode: 11.1.0
+     working_directory: /Users/distiller/project
+     shell: /bin/bash --login -eo pipefail
+     environment:
+     - LC_ALL: en_US.UTF-8
+     - LANG: en_US.UTF-8
+     - FL_OUTPUT_DIR: output
+     - FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
+     - TEST_RESULTS_DIR: ../output/scan
+     - HOMEBREW_NO_AUTO_UPDATE: 1
      steps:
-       - checkout
-       - run: echo "About to cancel workflow"
-       - deploy:
-           name: conditionally run a deploy job
-           command: |
-            # replace this with your build/deploy check (i.e. current branch is "release")
-               curl --user ${CIRCLE_API_USER_TOKEN}: \
-                 --data build_parameters[CIRCLE_JOB]=deploy_docker \
-                 --data revision=$CIRCLE_SHA1 \
-                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/623/cancel
-       - deploy:
-           name: conditionally run a deploy job
-           command: |
-            # replace this with your build/deploy check (i.e. current branch is "release")
-               curl --user ${CIRCLE_API_USER_TOKEN}: \
-                 --data build_parameters[CIRCLE_JOB]=deploy_docker \
-                 --data revision=$CIRCLE_SHA1 \
-                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/624/cancel
-       - deploy:
-           name: conditionally run a deploy job
-           command: |
-            # replace this with your build/deploy check (i.e. current branch is "release")
-               curl --user ${CIRCLE_API_USER_TOKEN}: \
-                 --data build_parameters[CIRCLE_JOB]=deploy_docker \
-                 --data revision=$CIRCLE_SHA1 \
-                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/625/cancel
-       - deploy:
-           name: conditionally run a deploy job
-           command: |
-            # replace this with your build/deploy check (i.e. current branch is "release")
-               curl --user ${CIRCLE_API_USER_TOKEN}: \
-                 --data build_parameters[CIRCLE_JOB]=deploy_docker \
-                 --data revision=$CIRCLE_SHA1 \
-                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/sample_app/626/cancel
-
-   deploy_docker:
-     macos:
-      xcode: "11.1.0"
- #    docker:
- #      - image: circleci/ruby:2.6.3-node-browsers
- #      - image: brianoh1979/bohruby:ruby263
- #        environment:
- #          BUNDLER_VERSION: 2.0.1
-     steps:
-     - run: echo "Workflow cancelled"
-
-
-         
+       - run:
+          name: checkout
+          command: "if [[ -e ./content/checkout.sh ]]; then\n  bash ./content/checkout.sh \nelse\n  URL=\"https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/content/checkout.sh?ref=$CIRCLE_SHA1\"\n  curl -s -S -X GET \\\n    -H \"authorization: Bearer $CIRCLE_API_USER_TOKEN\" \\\n    -H \"Accept: application/vnd.github.v3.raw\" \\\n    \"$URL\" | bash -s \nfi\n"
+       - run:
+          command: git lfs install && git lfs pull
+#       - run: wget https://zlib.net/zlib-1.2.11.tar.gz 
+ 
+ workflows:
+   version: 2
+   build_and_deploy_branch:
+     jobs:
+       - lint_and_test

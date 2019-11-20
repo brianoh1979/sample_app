@@ -112,7 +112,7 @@
      steps:
        - checkout
        - run: apt-get update
-       - run: sudo apt-get update2
+       - run: sudo apt-get update
        - restore_cache:
           keys:
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
