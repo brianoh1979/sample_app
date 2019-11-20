@@ -3,7 +3,7 @@
    lint_and_test:
      macos:
        xcode: 11.1.0
-     working_directory: /Users/distiller/project
+#     working_directory: /Users/distiller/project
      shell: /bin/bash --login -eo pipefail
      environment:
      - LC_ALL: en_US.UTF-8
@@ -15,7 +15,7 @@
      steps:
        - run:
           name: checkout
-          command: "if [[ -e ./content/checkout.sh ]]; then\n  bash ./content/checkout.sh \nelse\n  URL=\"https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/content/checkout.sh?ref=$CIRCLE_SHA1\"\n  curl -s -S -X GET \\\n    -H \"authorization: Bearer $CIRCLE_API_USER_TOKEN\" \\\n    -H \"Accept: application/vnd.github.v3.raw\" \\\n    \"$URL\" | bash -s \nfi\n"
+          command: "if [[ -e ./content/checkout.sh ]]; then\n  bash ./content/checkout.sh \nelse\n  URL=\"https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/content/checkout.sh?ref=$CIRCLE_SHA1\"\n  curl -s -S -X GET \\\n    -H \"authorization: Bearer $GITHUB_API_USER_TOKEN\" \\\n    -H \"Accept: application/vnd.github.v3.raw\" \\\n    \"$URL\" | bash -s \nfi\n"
        - run:
           command: git lfs install && git lfs pull
 #       - run: wget https://zlib.net/zlib-1.2.11.tar.gz 
