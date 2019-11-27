@@ -3,10 +3,10 @@
  version: 2
  jobs:
    build:
-#     docker:
-#       - image: brianoh1979/bohruby:ruby263
-     macos:
-      xcode: "11.1.0"
+     docker:
+       - image: brianoh1979/bohruby:ruby263
+#     macos:
+#      xcode: "11.1.0"
      steps:
        - checkout
        - run: echo "About to cancel workflow - back to the future"
