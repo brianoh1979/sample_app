@@ -1,7 +1,5 @@
 #This is my config file for CircleCI
-#  version: 2.1
-
- version: 2.1
+ # version: 2.1
  jobs:
    build:
      docker:
@@ -12,24 +10,22 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-  #     - run: *checkout-shallow
        - run: sudo apt-get update
-       - run: exit 0
+       - run: echo ${CIRCLE_TAG}
+       - run: echo ${CIRCLE_SHA1}
+  #     - run: exit 0
        - slack/notify:
            channel: CQ4NHT0DC
            color: '#42e2f4'
            message: This is a custom orb message notification that job worked
            webhook: '${SLACK_WEBHOOK}'
-       - run: echo ${CIRCLE_TAG}
-       - run: echo ${CIRCLE_SHA1}
+# orbs:
+#   slack: circleci/slack@3.4.1
+# version: 2.1
 
  orbs:
    slack: circleci/slack@3.4.1
  version: 2.1
-
-# orbs:
-#   slack: circleci/slack@3.4.1
-# version: 2.1
      
  workflows:
    version: 2
