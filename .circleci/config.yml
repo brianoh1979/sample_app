@@ -11,7 +11,7 @@
      steps:
        - checkout
        - run: sudo apt-get update
-       - run: echo ${CIRCLE_TAG}
+       - run: echo $CIRCLE_TAG
        - run: echo ${CIRCLE_SHA1}
   #     - run: exit 0
        - slack/notify:
