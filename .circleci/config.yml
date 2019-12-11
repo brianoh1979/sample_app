@@ -67,12 +67,10 @@
                curl -X POST -H 'Content-type: application/json' \
                  --data \
                  "{ \
-                   CQ4NHT0DC
                    \"channel\": CQ4NHT0DC, \
-                   CQ4NHT0DC
                    \"attachments\": [ \
                      { \
-                       \"text\": \"This is a custom orb message notification that job worked $SLACK_MENTIONS\", \
+                       \"text\": \"This is a custom orb message notification that job worked \", \
                          { \
                            \"title\": \"Job Number\", \
                            \"value\": \"$CIRCLE_BUILD_NUM\", \
