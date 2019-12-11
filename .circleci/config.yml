@@ -109,7 +109,7 @@
                      } \
                    ] \
                  }" ${SLACK_WEBHOOK}
-             fi
+#             fi
            name: Slack Notification
            shell: /bin/bash
 # version: 2.1
