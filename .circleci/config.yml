@@ -28,7 +28,8 @@
        - deploy:
            name: conditionally run another job
            command: |
-             if [[ $verdict2 == "false" ]]; then
+             echo $verdict2
+             if [[ $verdict2 == *false* ]]; then
                echo "This is not the first successful run"
              else
                echo "This is the first successful run"
