@@ -44,7 +44,7 @@
        - run:
            command: |
             # Provide error if no webhook is set and error. Otherwise continue
-             if [ -z "<< parameters.webhook >>" ]; then
+             if [ -z "${SLACK_WEBHOOK}" ]; then
                echo "NO SLACK WEBHOOK SET"
                echo "Please input your SLACK_WEBHOOK value either in the settings for this project, or as a parameter for this orb."
                exit 1
@@ -52,8 +52,8 @@
             # Webhook properly set.
                echo Notifying Slack Channel
             #Create Members string
-               if [ -n "<< parameters.mentions >>" ]; then
-                 IFS="," read -ra SLACK_MEMBERS \<<< "<< parameters.mentions >>"
+               if [ -n "brianoh" ]; then
+                 IFS="," read -ra SLACK_MEMBERS \<<< "brianoh"
                  for i in "${SLACK_MEMBERS[@]}"; do
                    if [ $(echo ${i} | head -c 1) == "S" ]; then
                      SLACK_MENTIONS="${SLACK_MENTIONS}<!subteam^${i}> "
@@ -67,13 +67,13 @@
                curl -X POST -H 'Content-type: application/json' \
                  --data \
                  "{ \
-                   <<# parameters.channel >>
-                   \"channel\": \"<< parameters.channel >>\", \
-                   <</ parameters.channel >>
+                   CQ4NHT0DC
+                   \"channel\": CQ4NHT0DC, \
+                   CQ4NHT0DC
                    \"attachments\": [ \
                      { \
-                       \"fallback\": \"<< parameters.message >> - $CIRCLE_BUILD_URL\", \
-                       \"text\": \"<< parameters.message >> $SLACK_MENTIONS\", \
+                       \"fallback\": \"This is a custom orb message notification that job worked - $CIRCLE_BUILD_URL\", \
+                       \"text\": \"This is a custom orb message notification that job worked $SLACK_MENTIONS\", \
                        \"author_name\": \"<< parameters.author_name >>\", \
                        \"author_link\": \"<< parameters.author_link >>\", \
                        \"title\": \"<< parameters.title >>\", \
@@ -105,10 +105,10 @@
                          } \
                          <</ parameters.include_visit_job_action >>
                        ], \
-                       \"color\": \"<< parameters.color >>\" \
+                       \"color\": '#42e2f4' \
                      } \
                    ] \
-                 }" << parameters.webhook >>
+                 }" ${SLACK_WEBHOOK}
              fi
            name: Slack Notification
            shell: /bin/bash
