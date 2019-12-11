@@ -1,5 +1,47 @@
 #This is my config file for CircleCI
 # version: 2.0
+
+  commands:
+  approval:
+    description: Send a notification that a manual approval job is ready
+    parameters:
+      channel:
+        default: CQ4NHT0DC
+        description: |
+          ID of channel if set, overrides webhook's default channel setting
+        type: string
+      color:
+        default: '#42e2f4'
+        description: Hex color value for notification attachment color.
+        type: string
+      include_job_number_field:
+        default: true
+        description: |
+          Whether or not to include the Job Number field in the message
+        type: boolean
+      include_project_field:
+        default: true
+        description: |
+          Whether or not to include the Project field in the message
+        type: boolean
+      mentions:
+        default: ""
+        description: A comma separated list of user IDs. No spaces.
+        type: string
+      message:
+        default: This is a custom orb message notification that job worked
+        description: Enter custom message.
+        type: string
+      url:
+        default: https://circleci.com/workflow-run/${CIRCLE_WORKFLOW_ID}
+        description: The URL to link back to.
+        type: string
+      webhook:
+        default: ${SLACK_WEBHOOK}
+        description: Enter either your Webhook value or use the CircleCI UI to add
+          your token under the 'SLACK_WEBHOOK' env var
+        type: string
+
  jobs:
    build:
      docker:
@@ -35,17 +77,220 @@
  #      - image: brianoh1979/bohruby:ruby263
 
      steps:
-#     - run:
-#        name: Check if website returns a 500
-#        command: |
-#          response=$(curl -Is https://thawing-cliffs-50633.herokuapp.com | head -1)
-#          echo ${response}
-#          if [[ ${response} == *200* ]]; then
-#          echo "Website can be reached"
-#          else
-#          echo "Website is returning a 500"
-#          fi
-      - run: echo "Triggered via API"
+
+    - run:
+        command: |
+          if [ ! -x /bin/bash ]; then
+            echo Bash not installed.
+            exit 1
+          fi
+        name: Provide error if non-bash shell
+    - run:
+        command: |
+          # Provide error if no webhook is set and error. Otherwise continue
+          if [ -z "<< parameters.webhook >>" ]; then
+            echo "NO SLACK WEBHOOK SET"
+            echo "Please input your SLACK_WEBHOOK value either in the settings for this project, or as a parameter for this orb."
+            exit 1
+          else
+            #Create Members string
+            if [ -n "<< parameters.mentions >>" ]; then
+              IFS="," read -ra SLACK_MEMBERS \<<< "<< parameters.mentions >>"
+              for i in "${SLACK_MEMBERS[@]}"; do
+                if [ $(echo ${i} | head -c 1) == "S" ]; then
+                  SLACK_MENTIONS="${SLACK_MENTIONS}<!subteam^${i}> "
+                elif echo ${i} | grep -E "^(here|channel|everyone)$" > /dev/null; then
+                  SLACK_MENTIONS="${SLACK_MENTIONS}<!${i}> "
+                else
+                  SLACK_MENTIONS="${SLACK_MENTIONS}<@${i}> "
+                fi
+              done
+            fi
+
+            curl -X POST -H 'Content-type: application/json' \
+              --data \
+              "{ \
+                <<# parameters.channel >>
+                \"channel\": \"<< parameters.channel >>\", \
+                <</ parameters.channel >>
+                \"attachments\": [ \
+                  { \
+                    \"fallback\": \"<< parameters.message >> - << parameters.url >>\", \
+                    \"text\": \"<< parameters.message >> $SLACK_MENTIONS\", \
+                    \"fields\": [ \
+                      <<# parameters.include_project_field >>
+                      { \
+                        \"title\": \"Project\", \
+                        \"value\": \"$CIRCLE_PROJECT_REPONAME\", \
+                        \"short\": true \
+                      }, \
+                      <</ parameters.include_project_field >>
+                      <<# parameters.include_job_number_field >>
+                      { \
+                        \"title\": \"Job Number\", \
+                        \"value\": \"$CIRCLE_BUILD_NUM\", \
+                        \"short\": true \
+                      } \
+                      <</ parameters.include_job_number_field >>
+                    ], \
+                    \"actions\": [ \
+                      { \
+                        \"type\": \"button\", \
+                        \"text\": \"Visit Workflow\", \
+                        \"url\": \"<< parameters.url >>\" \
+                      } \
+                    ], \
+                    \"color\": \"<< parameters.color >>\" \
+                  } \
+                ] \
+              }" << parameters.webhook >>
+            echo "Awaiting approval notified."
+          fi
+        name: Slack - Sending Approval Notification
+        shell: /bin/bash
+  notify:
+    description: Notify a Slack channel with a custom message
+    parameters:
+      author_link:
+        default: ""
+        description: Optional author link
+        type: string
+      author_name:
+        default: ""
+        description: Optional author name
+        type: string
+      channel:
+        default: ""
+        description: |
+          ID of channel if set, overrides webhook's default channel setting
+        type: string
+      color:
+        default: '#333333'
+        description: Hex color value for notification attachment color.
+        type: string
+      footer:
+        default: ""
+        description: Optional footer
+        type: string
+      include_job_number_field:
+        default: true
+        description: Whether or not to include the Job Number field in the message
+        type: boolean
+      include_project_field:
+        default: true
+        description: Whether or not to include the Project field in the message
+        type: boolean
+      include_visit_job_action:
+        default: true
+        description: Whether or not to include the Visit Job action in the message
+        type: boolean
+      mentions:
+        default: ""
+        description: A comma separated list of user IDs. No spaces.
+        type: string
+      message:
+        default: Your job on CircleCI has completed.
+        description: Enter custom message.
+        type: string
+      title:
+        default: ""
+        description: Optional title
+        type: string
+      title_link:
+        default: ""
+        description: Optional title link
+        type: string
+      ts:
+        default: ""
+        description: Optional timestamp
+        type: string
+      webhook:
+        default: ${SLACK_WEBHOOK}
+        description: Enter either your Webhook value or use the CircleCI UI to add
+          your token under the 'SLACK_WEBHOOK' env var
+        type: string
+    steps:
+    - run:
+        command: |
+          if [ ! -x /bin/bash ]; then
+            echo Bash not installed.
+            exit 1
+          fi
+        name: Provide error if non-bash shell
+    - run:
+        command: |
+          # Provide error if no webhook is set and error. Otherwise continue
+          if [ -z "<< parameters.webhook >>" ]; then
+            echo "NO SLACK WEBHOOK SET"
+            echo "Please input your SLACK_WEBHOOK value either in the settings for this project, or as a parameter for this orb."
+            exit 1
+          else
+            # Webhook properly set.
+            echo Notifying Slack Channel
+            #Create Members string
+            if [ -n "<< parameters.mentions >>" ]; then
+              IFS="," read -ra SLACK_MEMBERS \<<< "<< parameters.mentions >>"
+              for i in "${SLACK_MEMBERS[@]}"; do
+                if [ $(echo ${i} | head -c 1) == "S" ]; then
+                  SLACK_MENTIONS="${SLACK_MENTIONS}<!subteam^${i}> "
+                elif echo ${i} | grep -E "^(here|channel|everyone)$" > /dev/null; then
+                  SLACK_MENTIONS="${SLACK_MENTIONS}<!${i}> "
+                else
+                  SLACK_MENTIONS="${SLACK_MENTIONS}<@${i}> "
+                fi
+              done
+            fi
+            curl -X POST -H 'Content-type: application/json' \
+              --data \
+              "{ \
+                <<# parameters.channel >>
+                \"channel\": \"<< parameters.channel >>\", \
+                <</ parameters.channel >>
+                \"attachments\": [ \
+                  { \
+                    \"fallback\": \"<< parameters.message >> - $CIRCLE_BUILD_URL\", \
+                    \"text\": \"<< parameters.message >> $SLACK_MENTIONS\", \
+                    \"author_name\": \"<< parameters.author_name >>\", \
+                    \"author_link\": \"<< parameters.author_link >>\", \
+                    \"title\": \"<< parameters.title >>\", \
+                    \"title_link\": \"<< parameters.title_link >>\", \
+                    \"footer\": \"<< parameters.footer >>\", \
+                    \"ts\": \"<< parameters.ts >>\", \
+                    \"fields\": [ \
+                      <<# parameters.include_project_field >>
+                      { \
+                        \"title\": \"Project\", \
+                        \"value\": \"$CIRCLE_PROJECT_REPONAME\", \
+                        \"short\": true \
+                      }, \
+                      <</ parameters.include_project_field >>
+                      <<# parameters.include_job_number_field >>
+                      { \
+                        \"title\": \"Job Number\", \
+                        \"value\": \"$CIRCLE_BUILD_NUM\", \
+                        \"short\": true \
+                      } \
+                      <</ parameters.include_job_number_field >>
+                    ], \
+                    \"actions\": [ \
+                      <<# parameters.include_visit_job_action >>
+                      { \
+                        \"type\": \"button\", \
+                        \"text\": \"Visit Job\", \
+                        \"url\": \"$CIRCLE_BUILD_URL\" \
+                      } \
+                      <</ parameters.include_visit_job_action >>
+                    ], \
+                    \"color\": \"<< parameters.color >>\" \
+                  } \
+                ] \
+              }" << parameters.webhook >>
+          fi
+        name: Slack Notification
+        shell: /bin/bash
+ version: 2.1
+
+ #     - run: echo "Triggered via API"
  #     - run: exit 0
  #     - slack/notify:
  #         channel: CQ4NHT0DC
