@@ -51,19 +51,6 @@
              else
             # Webhook properly set.
                echo Notifying Slack Channel
-            #Create Members string
-               if [ -n "brianoh" ]; then
-                 echo "No Special Mentions"
-                 for i in "${SLACK_MEMBERS[@]}"; do
-                   if [ $(echo ${i} | head -c 1) == "S" ]; then
-                     SLACK_MENTIONS="${SLACK_MENTIONS}<!subteam^${i}> "
-                   elif echo ${i} | grep -E "^(here|channel|everyone)$" > /dev/null; then
-                     SLACK_MENTIONS="${SLACK_MENTIONS}<!${i}> "
-                   else
-                     SLACK_MENTIONS="${SLACK_MENTIONS}<@${i}> "
-                   fi
-                 done
-               fi
                curl -X POST -H 'Content-type: application/json' \
                  --data \
                  "{ \
@@ -79,7 +66,7 @@
                        ], \
                        \"color\": '#42e2f4' \
                      } \
-                 }" ${SLACK_WEBHOOK}
+                 }" "${SLACK_WEBHOOK}"
              fi
            name: Slack Notification
            shell: /bin/bash
