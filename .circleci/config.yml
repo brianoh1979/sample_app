@@ -20,7 +20,8 @@
             # if [[ $CIRCLE_BRANCH = "develop" ]]; then
              #  curl --user ${CIRCLE_API_USER_TOKEN}: --request GET https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM | jq '.["workflows"]["workflow_id"]'
              verdict=$(curl --user ${CIRCLE_API_USER_TOKEN}: --request GET https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM)
-             verdict2=$($verdict | jq '.["is_first_green_build"]') 
+             echo $verdict
+             verdict2=$(echo $verdict | jq '.["is_first_green_build"]') 
              echo $verdict2
 
            #  fi
