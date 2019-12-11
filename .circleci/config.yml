@@ -19,7 +19,7 @@
             # replace this with your build/deploy check (i.e. current branch is "release")
              if [[ $CIRCLE_BRANCH = "develop" ]]; then
              #  curl --user ${CIRCLE_API_USER_TOKEN}: --request GET https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM | jq '.["workflows"]["workflow_id"]'
-               curl --user ${CIRCLE_API_USER_TOKEN}: --request GET https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM | jq '.["workflows"]
+               curl --user ${CIRCLE_API_USER_TOKEN}: --request GET https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM 
              fi
 
   #     - run: exit 0
