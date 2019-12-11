@@ -17,11 +17,18 @@
            name: conditionally run a deploy job
            command: |
             # replace this with your build/deploy check (i.e. current branch is "release")
-             if [[ $CIRCLE_BRANCH = "develop" ]]; then
+            # if [[ $CIRCLE_BRANCH = "develop" ]]; then
              #  curl --user ${CIRCLE_API_USER_TOKEN}: --request GET https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM | jq '.["workflows"]["workflow_id"]'
-               curl --user ${CIRCLE_API_USER_TOKEN}: --request GET https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM | jq '.["is_first_green_build"]' 
-             fi
-
+             $VERDICT = curl --user ${CIRCLE_API_USER_TOKEN}: --request GET https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM | jq '.["is_first_green_build"]' 
+           #  fi
+       - deplox:
+           name: conditionally run another job
+           command: |
+             if $VERDICT = "false"
+               echo "This is not the first successful run"
+             else
+               echo "This is the first successful run"
+               fi
   #     - run: exit 0
   #     - slack/notify:
   #         channel: CQ4NHT0DC
