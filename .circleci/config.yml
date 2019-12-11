@@ -23,17 +23,22 @@
              echo $verdict
              verdict2=$(echo $verdict | jq '.["is_first_green_build"]') 
              echo $verdict2
-
-           #  fi
-       - deploy:
-           name: conditionally run another job
-           command: |
-             echo $verdict2
              if [[ $verdict2 == *false* ]]; then
                echo "This is not the first successful run"
              else
                echo "This is the first successful run"
                fi
+
+           #  fi
+#       - deploy:
+#           name: conditionally run another job
+#           command: |
+#             echo $verdict2
+#             if [[ $verdict2 == *false* ]]; then
+#               echo "This is not the first successful run"
+#             else
+#               echo "This is the first successful run"
+#               fi
   #     - run: exit 0
   #     - slack/notify:
   #         channel: CQ4NHT0DC
