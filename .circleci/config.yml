@@ -53,7 +53,7 @@
                echo Notifying Slack Channel
             #Create Members string
                if [ -n "brianoh" ]; then
-                 IFS="," read -ra SLACK_MEMBERS \<<< "brianoh"
+                 echo "No Special Mentions"
                  for i in "${SLACK_MEMBERS[@]}"; do
                    if [ $(echo ${i} | head -c 1) == "S" ]; then
                      SLACK_MENTIONS="${SLACK_MENTIONS}<!subteam^${i}> "
@@ -109,7 +109,7 @@
                      } \
                    ] \
                  }" ${SLACK_WEBHOOK}
-#             fi
+             fi
            name: Slack Notification
            shell: /bin/bash
 # version: 2.1
