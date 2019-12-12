@@ -58,14 +58,14 @@
                    \"attachments\": [ \
                      { \
                        \"fallback\": \"This is a custom orb message notification that job worked - $CIRCLE_BUILD_URL\", \
-                       \"text\": \"This is a custom orb message notification that job worked \", \
+                       \"text\": \"This is a custom orb message notification that job worked $SLACK_MENTIONS\", \
                        \"author_name\": \"\", \
                        \"author_link\": \"\", \
                        \"title\": \"\", \
                        \"title_link\": \"\", \
                        \"footer\": \"\", \
                        \"ts\": \"\", \
-                       \"fields\": [ \  
+                       \"fields\": [ \
                          { \
                            \"title\": \"Project\", \
                            \"value\": \"$CIRCLE_PROJECT_REPONAME\", \
@@ -84,7 +84,7 @@
                            \"url\": \"$CIRCLE_BUILD_URL\" \
                          } \
                        ], \
-                       \"color\": '#42e2f4' \               
+                       \"color\": \"#42e2f4\" \
                      } \
                    ] \
                  }" ${SLACK_WEBHOOK}
