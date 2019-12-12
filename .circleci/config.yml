@@ -54,7 +54,7 @@
                curl -X POST -H 'Content-type: application/json' \
                  --data \
                  "{ \
-                   \"channel\": CQ4NHT0DC, \
+                   \"channel\": \"CQ4NHT0DC\", \
                    \"attachments\": [ \
                      { \
                        \"fallback\": \"This is a custom orb message notification that job worked - $CIRCLE_BUILD_URL\", \
@@ -87,7 +87,7 @@
                        \"color\": '#42e2f4' \               
                      } \
                    ] \
-                 }" "${SLACK_WEBHOOK}"
+                 }" ${SLACK_WEBHOOK}
              fi
            name: Slack Notification
            shell: /bin/bash
