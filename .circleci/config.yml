@@ -408,7 +408,7 @@
               only:
                 - master
 
-build_and_deploy-staging:
+  build_and_deploy-staging:
     jobs:
       - checkout_code:
           filters:
