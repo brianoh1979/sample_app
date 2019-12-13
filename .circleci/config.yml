@@ -284,7 +284,7 @@
           cluster-name: << parameters.cluster_name >>
           verify-revision-is-deployed: true
 
-workflows:
+ workflows:
   version: 2
   # build-and-deploy_staging:
   #   jobs:
