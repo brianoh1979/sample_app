@@ -21,7 +21,7 @@
       #     POSTGRES_PASSWORD: circleci_test
       #     POSTGRES_USER: root
       #     POSTGRES_DB: circle_test
-    resource_class: small
+    resource_class: large
 
  jobs:
   checkout_code:
