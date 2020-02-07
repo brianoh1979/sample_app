@@ -20,38 +20,19 @@ describe User do
 
 string = <<EOF
 
-<?xml version="1.0" encoding="ISO-8859-15"?>
-
-<!DOCTYPE bibliography PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-
-    "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
-
-<bibliography>
-
-    <biblioentry id="FHIW13C-1234">
-
-      <author>
-
-        <firstname>Godfrey</firstname>
-
-        <surname>Vesey</surname>
-
-      </author>
-
-      <title>Personal Identity: A Philosophical Analysis</title>
-
-      <publisher>
-
-        <publishername>Cornell University Press</publishername>
-
-      </publisher>
-
-      <pubdate>1977</pubdate>
-
-   </biblioentry>
-
-</bibliography>
-
+<?xml version="1.0" encoding="UTF-8"?>
+   <testsuites id="20140612_170519" name="New_configuration (14/06/12 17:05:19)" tests="225" failures="1262" time="0.001">
+      <testsuite id="codereview.cobol.analysisProvider" name="COBOL Code Review" tests="45" failures="17" time="0.001">
+         <testcase id="codereview.cobol.rules.ProgramIdRule" name="Use a program name that matches the source file name" time="0.001">
+            <failure message="PROGRAM.cbl:2 Use a program name that matches the source file name" type="WARNING">
+WARNING: Use a program name that matches the source file name
+Category: COBOL Code Review – Naming Conventions
+File: /project/PROGRAM.cbl
+Line: 2
+      </failure>
+    </testcase>
+  </testsuite>
+</testsuites>
 EOF
 #  describe "when name is not present" do
 #    before { @user.name = " " }
