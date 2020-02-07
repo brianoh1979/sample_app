@@ -14,7 +14,7 @@
             gem update --system
             gem install bundler
 
-       - run: gem install rspec_junit_formatter
+#       - run: gem install rspec_junit_formatter
        # Below step should kick in from second run onwards
        - restore_cache:
           keys:
@@ -51,10 +51,10 @@
      #     path: test-results.xml
      #     prefix: tests
        - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
-          path: coverage
+          path: ~/rspec
           prefix: coverage
        - store_test_results: # for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
-          path: test-results.xml
+          path: ~/rspec
        # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
     
        
