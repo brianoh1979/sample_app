@@ -1,0 +1,519 @@
+# PHP CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-php/ for more details
+#
+ version: 2.1
+
+ orbs:
+  aws-cli: circleci/aws-cli@0.1.13
+  aws-code-deploy: circleci/aws-code-deploy@0.0.9
+  aws-ecr: circleci/aws-ecr@6.5.0
+  aws-ecs: circleci/aws-ecs@0.0.18
+
+ executors:
+  main:
+    docker:
+      - image: circleci/php:7.1
+      #   environment:
+      #     DATABASE_URL: postgres://root:circleci_test@localhost/circle_test
+      # - image: circleci/postgres:11.1
+      #   environment:
+      #     POSTGRES_PASSWORD: circleci_test
+      #     POSTGRES_USER: root
+      #     POSTGRES_DB: circle_test
+    resource_class: small
+
+ jobs:
+  checkout_code:
+    executor: main
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - .
+
+  build_and_test:
+    executor: main
+    working_directory: ~/repo
+    steps:
+      - attach_workspace:
+          at: ~/repo
+
+      - run:
+          name: install dependencies
+          command: |
+            sudo apt update && sudo apt install zlib1g-dev libsqlite3-dev
+            sudo docker-php-ext-install zip
+            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+            echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+            sudo apt-get update && sudo apt-get install yarn
+
+      # Download and cache dependencies
+
+      # composer cache
+      - restore_cache:
+          keys:
+          # "composer.lock" can be used if it is committed to the repo
+          - v1-dependencies-{{ checksum "composer.lock" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: prepare local .env_var_name
+          command: |
+            cp .env.example .env
+            composer global require hirak/prestissimo --no-plugins --no-scripts
+
+      - run: composer install -n --prefer-dist
+
+      - save_cache:
+          key: composer-v1-{{ checksum "composer.lock" }}
+          paths:
+            - vendor
+
+      # node cache
+
+      - restore_cache:
+          keys:
+            - node-v4-{{ checksum "package.json" }}
+            - node-v4-
+      - run: yarn
+      - save_cache:
+          key: node-v4-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+            - ~/.yarn
+
+      # run tests with phpunit or codecept
+      #- run: ./vendor/bin/phpunit
+      # this example uses codecept but you're not limited to it
+      - run: ./vendor/bin/phpunit --log-junit report.xml
+      - store_test_results:
+          path: tests/_output
+      - store_artifacts:
+          path: tests/_output
+
+  build_and_push_image:
+    machine:
+      image: ubuntu-1604:201903-01
+      docker_layer_caching: true
+    parameters:
+      aws_account_id:
+        type: env_var_name
+      aws_ecr_url:
+        type: string
+      aws_key_id:
+        type: env_var_name
+      aws_secret_key:
+        type: env_var_name
+      aws_region:
+        type: env_var_name
+      env:
+        type: string
+        default: "_"
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Push to ECR
+          command: |
+              export AWS_ACCESS_KEY_ID="${<< parameters.aws_key_id >>}"
+              export AWS_SECRET_ACCESS_KEY="${<< parameters.aws_secret_key >>}"
+              export AWS_REGION="${<< parameters.aws_region >>}"
+              export AWS_DEFAULT_REGION="${<< parameters.aws_region >>}"
+              export AWS_ACCOUNT_ID="${<< parameters.aws_account_id >>}"
+
+              echo "export AWS_ACCESS_KEY_ID='${<< parameters.aws_key_id >>}'" >> $BASH_ENV
+              echo "export AWS_SECRET_ACCESS_KEY='${<< parameters.aws_secret_key >>}'" >> $BASH_ENV
+              echo "export AWS_REGION='${<< parameters.aws_region >>}'" >> $BASH_ENV
+              echo "export AWS_DEFAULT_REGION='${<< parameters.aws_region >>}'" >> $BASH_ENV
+              echo "export AWS_ACCOUNT_ID='${<< parameters.aws_account_id >>}'" >> $BASH_ENV
+
+      - aws-cli/install
+      - aws-cli/configure:
+          aws-access-key-id: << parameters.aws_key_id >>
+          aws-secret-access-key: << parameters.aws_secret_key >>
+          aws-region: << parameters.aws_region >>
+
+      - aws-ecr/build-and-push-image:
+          account-url: << parameters.aws_ecr_url>>
+          region: << parameters.aws_region >>
+          checkout: false
+          repo: "em<< parameters.env >>cp"
+          tag: '${CIRCLE_SHA1},latest'
+          dockerfile: "~/repo/docker/Dockerfile"
+          path: "~/repo"
+
+  update_task_ecs:
+    parameters:
+      family:
+        type: string
+      cluster_name:
+        type: string
+      aws_account_id:
+        type: env_var_name
+      aws_key_id:
+        type: env_var_name
+      aws_secret_key:
+        type: env_var_name
+      aws_region:
+        type: env_var_name
+    executor: aws-cli/default
+    working_directory: ~/repo
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Update ECS task definition
+          command: |
+              export AWS_ACCESS_KEY_ID="${<< parameters.aws_key_id >>}"
+              export AWS_SECRET_ACCESS_KEY="${<< parameters.aws_secret_key >>}"
+              export AWS_REGION="${<< parameters.aws_region >>}"
+              export AWS_DEFAULT_REGION="${<< parameters.aws_region >>}"
+              export AWS_ACCOUNT_ID="${<< parameters.aws_account_id >>}"
+
+              echo "export AWS_ACCESS_KEY_ID='${<< parameters.aws_key_id >>}'" >> $BASH_ENV
+              echo "export AWS_SECRET_ACCESS_KEY='${<< parameters.aws_secret_key >>}'" >> $BASH_ENV
+              echo "export AWS_REGION='${<< parameters.aws_region >>}'" >> $BASH_ENV
+              echo "export AWS_DEFAULT_REGION='${<< parameters.aws_region >>}'" >> $BASH_ENV
+              echo "export AWS_ACCOUNT_ID='${<< parameters.aws_account_id >>}'" >> $BASH_ENV
+      - aws-cli/install
+      - aws-cli/configure:
+          aws-access-key-id: << parameters.aws_key_id >>
+          aws-secret-access-key: << parameters.aws_secret_key >>
+          aws-region: << parameters.aws_region >>
+      - aws-ecs/update-task-definition:
+          family: << parameters.family >>
+          container-image-name-updates: 'container=em_cp,tag=${CIRCLE_SHA1}'
+
+  run_migrations_ecs:
+    parameters:
+      family:
+        type: string
+      cluster_name:
+        type: string
+      aws_account_id:
+        type: env_var_name
+      aws_key_id:
+        type: env_var_name
+      aws_secret_key:
+        type: env_var_name
+      aws_region:
+        type: env_var_name
+    executor: aws-cli/default
+    working_directory: ~/repo
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Run deploy task - DB migrations
+          command: |
+              export AWS_ACCESS_KEY_ID="${<< parameters.aws_key_id >>}"
+              export AWS_SECRET_ACCESS_KEY="${<< parameters.aws_secret_key >>}"
+              export AWS_REGION="${<< parameters.aws_region >>}"
+              export AWS_DEFAULT_REGION="${<< parameters.aws_region >>}"
+              export AWS_ACCOUNT_ID="${<< parameters.aws_account_id >>}"
+
+              echo "export AWS_ACCESS_KEY_ID='${<< parameters.aws_key_id >>}'" >> $BASH_ENV
+              echo "export AWS_SECRET_ACCESS_KEY='${<< parameters.aws_secret_key >>}'" >> $BASH_ENV
+              echo "export AWS_REGION='${<< parameters.aws_region >>}'" >> $BASH_ENV
+              echo "export AWS_DEFAULT_REGION='${<< parameters.aws_region >>}'" >> $BASH_ENV
+              echo "export AWS_ACCOUNT_ID='${<< parameters.aws_account_id >>}'" >> $BASH_ENV
+      - aws-cli/install
+      - aws-cli/configure:
+          aws-access-key-id: << parameters.aws_key_id >>
+          aws-secret-access-key: << parameters.aws_secret_key >>
+          aws-region: << parameters.aws_region >>
+      # - aws-ecs/update-task-definition:
+      #     family: << parameters.family >>
+      #     container-image-name-updates: 'container=em_em,tag=${CIRCLE_SHA1}'
+      #     # aws-access-key-id: << parameters.aws_key_id >>
+      #     # aws-secret-access-key: << parameters.aws_secret_key >>
+      #     # aws-region: << parameters.aws_region >>
+      - run:
+          name: Run migrations
+          command: |
+            aws ecs run-task --cluster << parameters.cluster_name >> --task-definition << parameters.family >>
+
+  deploy_ecs:
+    parameters:
+      family:
+        type: string
+      service-name:
+        type: string
+        default: ''
+      cluster_name:
+        type: string
+      aws_account_id:
+        type: env_var_name
+      aws_key_id:
+        type: env_var_name
+      aws_secret_key:
+        type: env_var_name
+      aws_region:
+        type: env_var_name
+    executor: aws-cli/default
+    working_directory: ~/repo
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Push to ECR
+          command: |
+              export AWS_ACCESS_KEY_ID="${<< parameters.aws_key_id >>}"
+              export AWS_SECRET_ACCESS_KEY="${<< parameters.aws_secret_key >>}"
+              export AWS_REGION="${<< parameters.aws_region >>}"
+              export AWS_DEFAULT_REGION="${<< parameters.aws_region >>}"
+              export AWS_ACCOUNT_ID="${<< parameters.aws_account_id >>}"
+
+              echo "export AWS_ACCESS_KEY_ID='${<< parameters.aws_key_id >>}'" >> $BASH_ENV
+              echo "export AWS_SECRET_ACCESS_KEY='${<< parameters.aws_secret_key >>}'" >> $BASH_ENV
+              echo "export AWS_REGION='${<< parameters.aws_region >>}'" >> $BASH_ENV
+              echo "export AWS_DEFAULT_REGION='${<< parameters.aws_region >>}'" >> $BASH_ENV
+              echo "export AWS_ACCOUNT_ID='${<< parameters.aws_account_id >>}'" >> $BASH_ENV
+      - aws-cli/install
+      - aws-cli/configure:
+          aws-access-key-id: << parameters.aws_key_id >>
+          aws-secret-access-key: << parameters.aws_secret_key >>
+          aws-region: << parameters.aws_region >>
+      - aws-ecs/update-service:
+          family: << parameters.family >>
+          service-name: << parameters.service-name >>
+          cluster-name: << parameters.cluster_name >>
+          verify-revision-is-deployed: true
+
+ workflows:
+  version: 2
+  # build-and-deploy_staging:
+  #   jobs:
+  #     - checkout_code:
+  #         filters:
+  #           branches:
+  #             only: develop
+  #     - build-and-test:
+  #         requires:
+  #           - checkout_code
+  #     - deploy_staging:
+  #         requires:
+  #           - build-and-test
+  #         filters:
+  #           branches:
+  #             only: develop
+
+  build_and_deploy-production:
+    jobs:
+      - checkout_code:
+          filters:
+            branches:
+              only:
+                - master
+
+      # - build_and_test:
+      #     requires:
+      #       - checkout_code
+      #     filters:
+      #       branches:
+      #         only: aws
+
+      - build_and_push_image:
+          aws_account_id: PROD_AWS_ACCOUNT_ID
+          aws_ecr_url: PROD_AWS_ECR_URL
+          aws_key_id: PROD_AWS_KEY_ID
+          aws_secret_key: PROD_AWS_SECRET_KEY
+          aws_region: PROD_AWS_REGION
+          requires:
+            - checkout_code
+            # - build_and_test
+          filters:
+            branches:
+              only:
+                - master
+
+      - update_task_ecs:
+          family: em-cp_deploy
+          cluster_name: em_production-workers
+          aws_account_id: PROD_AWS_ACCOUNT_ID
+          aws_key_id: PROD_AWS_KEY_ID
+          aws_secret_key: PROD_AWS_SECRET_KEY
+          aws_region: PROD_AWS_REGION
+          requires:
+            - build_and_push_image
+          filters:
+            branches:
+              only:
+                - master
+
+      - run_migrations_ecs:
+          family: em-cp_deploy
+          cluster_name: em_production-workers
+          aws_account_id: PROD_AWS_ACCOUNT_ID
+          aws_key_id: PROD_AWS_KEY_ID
+          aws_secret_key: PROD_AWS_SECRET_KEY
+          aws_region: PROD_AWS_REGION
+          requires:
+            - build_and_push_image
+            - update_task_ecs
+          filters:
+            branches:
+              only:
+                - master
+
+      - deploy_ecs:
+          name: "ECS deploy: em-cp"
+          family: em-cp
+          cluster_name: em_production-frontend
+          aws_account_id: PROD_AWS_ACCOUNT_ID
+          aws_key_id: PROD_AWS_KEY_ID
+          aws_secret_key: PROD_AWS_SECRET_KEY
+          aws_region: PROD_AWS_REGION
+          requires:
+            - build_and_push_image
+            - run_migrations_ecs
+          filters:
+            branches:
+              only:
+                - master
+
+      - deploy_ecs:
+          name: "ECS deploy: em-cp_worker"
+          family: em-cp_worker
+          cluster_name: em_production-workers
+          aws_account_id: PROD_AWS_ACCOUNT_ID
+          aws_key_id: PROD_AWS_KEY_ID
+          aws_secret_key: PROD_AWS_SECRET_KEY
+          aws_region: PROD_AWS_REGION
+          requires:
+            - build_and_push_image
+            - run_migrations_ecs
+          filters:
+            branches:
+              only:
+                - master
+
+      - deploy_ecs:
+          name: "ECS deploy: em-cp_cron"
+          family: em-cp_cron
+          cluster_name: em_production-workers
+          aws_account_id: PROD_AWS_ACCOUNT_ID
+          aws_key_id: PROD_AWS_KEY_ID
+          aws_secret_key: PROD_AWS_SECRET_KEY
+          aws_region: PROD_AWS_REGION
+          requires:
+            - build_and_push_image
+            - run_migrations_ecs
+          filters:
+            branches:
+              only:
+                - master
+
+  build_and_deploy-staging:
+    jobs:
+      - checkout_code:
+          filters:
+            branches:
+              only:
+                - develop
+
+      # - build_and_test:
+      #     requires:
+      #       - checkout_code
+      #     filters:
+      #       branches:
+      #         only: aws
+
+      - build_and_push_image:
+          aws_account_id: STAGE_AWS_ACCOUNT_ID
+          aws_ecr_url: STAGE_AWS_ECR_URL
+          aws_key_id: STAGE_AWS_KEY_ID
+          aws_secret_key: STAGE_AWS_SECRET_KEY
+          aws_region: STAGE_AWS_REGION
+          env: "_staging_"
+          requires:
+            - checkout_code
+            # - build_and_test
+          filters:
+            branches:
+              only:
+                - develop
+
+      - update_task_ecs:
+          family: em_staging-cp_deploy
+          cluster_name: em_staging-frontend
+          aws_account_id: STAGE_AWS_ACCOUNT_ID
+          aws_key_id: STAGE_AWS_KEY_ID
+          aws_secret_key: STAGE_AWS_SECRET_KEY
+          aws_region: STAGE_AWS_REGION
+          requires:
+            - build_and_push_image
+          filters:
+            branches:
+              only:
+                - develop
+
+      - run_migrations_ecs:
+          family: em_staging-cp_deploy
+          cluster_name: em_staging-frontend
+          aws_account_id: STAGE_AWS_ACCOUNT_ID
+          aws_key_id: STAGE_AWS_KEY_ID
+          aws_secret_key: STAGE_AWS_SECRET_KEY
+          aws_region: STAGE_AWS_REGION
+          requires:
+            - build_and_push_image
+            - update_task_ecs
+          filters:
+            branches:
+              only:
+                - develop
+
+      - deploy_ecs:
+          name: "ECS deploy: em-cp"
+          family: em_staging-cp
+          service-name: em-cp
+          cluster_name: em_staging-frontend
+          aws_account_id: STAGE_AWS_ACCOUNT_ID
+          aws_key_id: STAGE_AWS_KEY_ID
+          aws_secret_key: STAGE_AWS_SECRET_KEY
+          aws_region: STAGE_AWS_REGION
+          requires:
+            - build_and_push_image
+            - run_migrations_ecs
+          filters:
+            branches:
+              only:
+                - develop
+
+      - deploy_ecs:
+          name: "ECS deploy: em-cp_worker"
+          family: em_staging-cp_worker
+          service-name: em-cp_worker
+          cluster_name: em_staging-frontend
+          aws_account_id: STAGE_AWS_ACCOUNT_ID
+          aws_key_id: STAGE_AWS_KEY_ID
+          aws_secret_key: STAGE_AWS_SECRET_KEY
+          aws_region: STAGE_AWS_REGION
+          requires:
+            - build_and_push_image
+            - run_migrations_ecs
+          filters:
+            branches:
+              only:
+                - develop
+
+      - deploy_ecs:
+          name: "ECS deploy: em-cp_cron"
+          family: em_staging-cp_cron
+          service-name: em-cp_cron
+          cluster_name: em_staging-frontend
+          aws_account_id: STAGE_AWS_ACCOUNT_ID
+          aws_key_id: STAGE_AWS_KEY_ID
+          aws_secret_key: STAGE_AWS_SECRET_KEY
+          aws_region: STAGE_AWS_REGION
+          requires:
+            - build_and_push_image
+            - run_migrations_ecs
+          filters:
+            branches:
+              only:
+                - develop
