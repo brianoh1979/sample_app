@@ -58,7 +58,7 @@
            command: |
              echo $(circleci tests glob "spec/features/models/*.rb") 
              circleci tests glob "spec/features/models/*.rb" | xargs -n 1 echo           
-       - run: TESTFILES=$(circleci tests glob "spec/features/models/*.rb" | circleci tests split --split-by=timing)
+       - run: TESTFILES=$(circleci tests glob "spec/features/models/*.rb" | circleci tests split --split-by=timings)
        - run: echo $TESTFILES
        - run: bundle exec rspec -- ${TESTFILES}
    #Start of Browser testing
