@@ -62,7 +62,7 @@
        - run: echo $TESTFILES
        - run: bundle exec rspec  --profile 10 --tag ~skip_in_ci \
               --format progress --format documentation --format RspecJunitFormatter -o ~/rspec/rspec.xml \
-              ${TESTFILES
+              ${TESTFILES}
 #       - run: bundle exec rspec -- ${TESTFILES}
        - run: mkdir ~/rspec
        - store_test_results:
