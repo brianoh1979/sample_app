@@ -61,6 +61,9 @@
        - run: TESTFILES=$(circleci tests glob "spec/features/models/*.rb" | circleci tests split --split-by=timings --timings-type=classname)
        - run: echo $TESTFILES
        - run: bundle exec rspec -- ${TESTFILES}
+       - run: mkdir ~/rspec
+       - store_test_results:
+           path: ~/rspec
    #Start of Browser testing
    browsertest:
      docker:
