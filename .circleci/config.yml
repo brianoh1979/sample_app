@@ -66,6 +66,8 @@
 #       - run: mkdir ~/rspec
        - store_test_results:
            path: ~/rspec
+       - store_artifacts:
+           path: test-results/rspec
    #Start of Browser testing
    browsertest:
      docker:
