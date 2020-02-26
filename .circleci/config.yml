@@ -64,7 +64,8 @@
 #              --format RspecJunitFormatter \
 #              -o ~/rspec/rspec.xml \
 #              -- ${TESTFILES}
-       - run: bundle exec rspec -- ${TESTFILES}
+#       - run: bundle exec rspec -- ${TESTFILES}
+       - run: bundle exec rspec  --format progress --format RspecJunitFormatter -o ~/rspec/rspec.xml -- ${TESTFILES}
        - run: mkdir ~/rspec
        - store_test_results:
            path: ~/rspec
