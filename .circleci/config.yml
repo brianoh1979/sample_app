@@ -65,7 +65,7 @@
        - run: bundle exec rspec  --profile 10 --tag ~skip_in_ci --format progress --format documentation --format RspecJunitFormatter -o ~/rspec/rspec.xml -- ${TESTFILES}
 #       - run: mkdir ~/rspec
        - store_test_results:
-           path: ~/rspec
+           path: test-results/rspec
        - store_artifacts:
            path: test-results/rspec
    #Start of Browser testing
