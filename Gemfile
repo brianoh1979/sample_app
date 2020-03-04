@@ -10,7 +10,7 @@ gem 'faker', '1.7.3'
 gem 'jbuilder',     '2.7.0'
 gem 'jquery-rails', '4.3.1'
 gem 'overcommit',   '0.32.0'
-gem 'puma', '3.9.1'
+gem 'puma', '3.12.4'
 gem 'rails', '5.1.6'
 gem 'rspec', '~> 3.6'
 gem 'rubocop', require: false
