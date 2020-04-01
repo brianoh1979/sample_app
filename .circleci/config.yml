@@ -5,17 +5,19 @@
 
  jobs:
    build-docker-image:
-     machine:
-       image: ubuntu-1604:201903-01
+     machine: {image: 'ubuntu-1604:201903-01'}
      steps:
        - run: 
            name: docker login
            command: |
              echo "$DOCKER_PASSWORD" | \
                docker login --username "$DOCKER_LOGIN" --password-stdin https://hub.docker.com
+ 
        - docker-cache/with-save-restore-images:
            repository: brianoh1979/dct
-           images: 'myapp:${CIRCLE_BRANCH/\//-} myapp:master'
+           images: >-
+             myapp:${CIRCLE_BRANCH/\//-}
+             myapp:master
            steps:
              - docker-cache/build:
                  command: 'docker build -t myapp:${CIRCLE_BRANCH/\//-} .'
