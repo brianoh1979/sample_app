@@ -1,26 +1,27 @@
-
- version: 2.1
- orbs:
-   docker-cache: cci-x/docker-registry-image-cache@0.2.0
-
+ version: 2
  jobs:
-   build-docker-image:
-     machine: {image: 'ubuntu-1604:201903-01'}
+   build:
+     docker:
+       - image: circleci/ruby:2.6.3-node-browsers
+         environment:
+           BUNDLER_VERSION: 2.0.1
      steps:
-       - run: 
-           name: docker login
+       - checkout
+       - run: sudo apt-get update
+       - deploy:
+           name: conditionally run a deploy job
            command: |
-             echo "$DOCKER_PASSWORD" | \
-               docker login --username "$DOCKER_LOGIN" --password-stdin https://hub.docker.com
- 
-       - docker-cache/with-save-restore-images:
-           repository: brianoh1979/dct
-           images: >-
-             myapp:${CIRCLE_BRANCH/\//-}
-             myapp:master
-           steps:
-             - docker-cache/build:
-                 command: 'docker build -t myapp:${CIRCLE_BRANCH/\//-} .'
-#       - run:
-#           name: Test
-#           command: ./test-all  
+            # replace this with your build/deploy check (i.e. current branch is "release")
+             if [[ $CIRCLE_BRANCH = "master" ]]; then
+               curl --user ${CIRCLE_API_USER_TOKEN}: \
+                 --data revision=$CIRCLE_SHA1 \
+                 https://circleci.com/api/v2/insights/brianoh1979/mikita_repo/workflows \
+                 -H 'Accept: application/json'
+             fi
+     
+ workflows:
+   version: 2
+   build_and_test:
+     jobs:
+       - build
+
