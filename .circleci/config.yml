@@ -12,7 +12,7 @@
            name: conditionally run a deploy job
            command: |
             # replace this with your build/deploy check (i.e. current branch is "release")
-             if [[ $CIRCLE_BRANCH = "master" ]]; then
+             if [[ $CIRCLE_BRANCH = "develop" ]]; then
                curl --user ${CIRCLE_API_USER_TOKEN}: \
                  --data revision=$CIRCLE_SHA1 \
                  https://circleci.com/api/v2/insights/brianoh1979/mikita_repo/workflows \
