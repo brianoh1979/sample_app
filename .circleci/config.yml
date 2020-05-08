@@ -10,7 +10,7 @@
        - slack/notify:
            channel: CQ4NHT0DC
            color: '#42e2f4'
-           message: Please click on the following link and approve the on-hold job "approve_branch_deployment" - $CIRCLE_BUILD_URL/workflows/$CIRCLE_WORKFLOW_ID
+           message: Please click on the following link and approve the on-hold job "approve_branch_deployment" - https://circleci.com/workflow-run/$CIRCLE_WORKFLOW_ID
            webhook: '${SLACK_WEBHOOK}'
    lint_and_test_2:
      docker:
@@ -21,7 +21,7 @@
        - slack/notify:
            channel: CQ4NHT0DC
            color: '#42e2f4'
-           message: Please click on the following link and approve the on-hold job "hold" - $CIRCLE_BUILD_URL/workflows/$CIRCLE_WORKFLOW_ID
+           message: Please click on the following link and approve the on-hold job "hold" - https://circleci.com/workflow-run/$CIRCLE_WORKFLOW_ID
            webhook: '${SLACK_WEBHOOK}'
    auto-cancel:
      docker:
