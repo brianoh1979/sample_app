@@ -159,10 +159,6 @@
    deploy:
      machine:
        image: ubuntu-1604:202004-01
-  #     - image: circleci/ruby:2.6.3-node-browsers
-  #       environment:
-  #         BUNDLER_VERSION: 2.0.1
-     #parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
@@ -192,11 +188,8 @@
 
    deploy_docker:
      docker:
- #      - image: circleci/ruby:2.6.3-node-browsers
        machine:
          image: ubuntu-1604:202004-01
- #        environment:
- #          BUNDLER_VERSION: 2.0.1
      steps:
      - run:
         name: Check if website returns a 500
