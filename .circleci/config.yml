@@ -4,8 +4,8 @@
  version: 2
  jobs:
    build:
-     docker:
-       - image: brianoh1979/bohruby:ruby263
+     machine:
+       image: ubuntu-1604:202004-01
      steps:
        - checkout
        - run: apt-get update
@@ -157,8 +157,8 @@
           prefix: coverage
     #Deploy job
    deploy:
-     docker:
-       - image: brianoh1979/bohruby:ruby263
+     machine:
+       image: ubuntu-1604:202004-01
   #     - image: circleci/ruby:2.6.3-node-browsers
   #       environment:
   #         BUNDLER_VERSION: 2.0.1
@@ -193,7 +193,8 @@
    deploy_docker:
      docker:
  #      - image: circleci/ruby:2.6.3-node-browsers
-       - image: brianoh1979/bohruby:ruby263
+       machine:
+         image: ubuntu-1604:202004-01
  #        environment:
  #          BUNDLER_VERSION: 2.0.1
      steps:
