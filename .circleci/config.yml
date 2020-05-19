@@ -8,7 +8,7 @@
        - checkout
 #       - run: apt-get update
        - run: sudo apt-get update
-       - run: bundle update --bundler
+#       - run: bundle update --bundler
        # Below step should kick in from second run onwards
        - restore_cache:
           keys:
