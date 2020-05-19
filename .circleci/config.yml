@@ -30,7 +30,7 @@
        - checkout
        - run:
            name: Check free space of Machine Executor
-           command: echo -n 10 "This jobs is still running..."
+           command: while sleep 1; do echo "This job is still running"; done
            background: true
  #      - run: apt-get update
        - run: sudo apt-get update
