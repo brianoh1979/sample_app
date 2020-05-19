@@ -6,7 +6,7 @@
        image: ubuntu-1604:202004-01
      steps:
        - checkout
-       - run: gem install pg -v '0.20.0' --source 'https://rubygems.org/'
+#       - run: gem install pg -v '0.20.0' --source 'https://rubygems.org/'
        - run: sudo apt-get update
 #       - run: bundle update --bundler
        # Below step should kick in from second run onwards
