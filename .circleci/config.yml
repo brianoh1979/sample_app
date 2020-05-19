@@ -30,7 +30,7 @@
        - checkout
        - run:
            name: Check free space of Machine Executor
-           command: watch -no 10 free -m
+           command: watch -n 10 free -m
            background: true
  #      - run: apt-get update
        - run: sudo apt-get update
@@ -41,7 +41,7 @@
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
- #      - run: bundle update --bundler
+       - run: bundle update --bundler
        - run: rake db:test:prepare 
        - run:
            command: |
