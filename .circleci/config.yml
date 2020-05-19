@@ -6,7 +6,7 @@
        image: ubuntu-1604:202004-01
      steps:
        - checkout
-       - run: apt-get update
+#       - run: apt-get update
        - run: sudo apt-get update
        - run: bundle update --bundler
        # Below step should kick in from second run onwards
@@ -32,7 +32,7 @@
            name: Check free space of Machine Executor
            command: watch -no 10 free -m
            background: true
-       - run: apt-get update
+ #      - run: apt-get update
        - run: sudo apt-get update
        - run: sudo apt-get install -y nodejs
        - run: sudo apt-get install -y tzdata
@@ -61,7 +61,7 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-       - run: apt-get update
+  #     - run: apt-get update
        - run: sudo apt-get update
        - run: sudo apt-get upgrade -y  
        - run: sudo apt-get install apt-transport-https
@@ -100,7 +100,7 @@
        image: ubuntu-1604:202004-01
      steps:
        - checkout
-       - run: apt-get update
+   #    - run: apt-get update
        - run: sudo apt-get update
        - restore_cache:
           keys:
@@ -117,7 +117,7 @@
        image: ubuntu-1604:202004-01
      steps:
        - checkout
-       - run: apt-get update
+  #     - run: apt-get update
        - run: sudo apt-get update
        - run: sudo apt-get install -y nodejs
        - run: sudo apt-get install -y tzdata
@@ -139,8 +139,8 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-       - run: apt-get update
-       - run: apt-get install sudo
+  #     - run: apt-get update
+  #     - run: apt-get install sudo
        - run: sudo apt-get update
        - restore_cache:
           keys:
