@@ -1,12 +1,19 @@
-#Comment to trigger fresh commit!!!!
+#Comment to trigger fresh commit!!
  version: 2
  jobs:
    build:
      docker:
-      - image: circleci/ruby:2.4.1
+      - image: circleci/golang:1.8-jessie
+      - image: circleci/postgres:9.6-alpine
+        environment:
+          POSTGRES_USER: circleci-demo-go
+          POSTGRES_DB: circle_test
      steps:
        - checkout
        - run: echo "A first hello"
+       - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://127.0.0.1:5432 -timeout 120s
 
 
          
