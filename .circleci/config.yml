@@ -5,7 +5,7 @@
  jobs:
    build:
      docker:
-       - image: brianoh1979/bohruby:ruby263
+       - image: circleci/ruby:2.4.1
      steps:
        - checkout
        - run: apt-get update
