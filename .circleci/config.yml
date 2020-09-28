@@ -20,7 +20,6 @@
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
-  #     - run: bundle install     
        - save_cache:
           key: gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
           paths:
@@ -50,7 +49,6 @@
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
-#       - run: gem install bundler:2.0.1
        - run: bundle update --bundler
        - run: rake db:test:prepare 
        - run:
@@ -76,7 +74,6 @@
             gem install bundler -v 2.0.2
             gem update --system
             bundle update --bundler
-  #     - run: bundle install
        - run: sudo apt-get upgrade -y  
        - run: sudo apt-get install apt-transport-https
        - restore_cache:
@@ -130,7 +127,6 @@
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
        - run: bundle update --bundler
-  #     - run: bundle install
        - run: bundle exec bundler-audit check --ignore CVE-2015-7580 CVE-2015-7578 CVE-2015-7579
        - run: rails_best_practices .
    #Code Coverage
@@ -148,7 +144,6 @@
             gem install bundler -v 2.0.2
             gem update --system
             bundle update --bundler
- #      - run: bundle install
        - run: sudo apt-get install -y nodejs
        - run: sudo apt-get install -y tzdata
        - restore_cache:
@@ -166,23 +161,17 @@
    deploy:
      docker:
        - image: circleci/ruby:2.6.3
-  #     - image: circleci/ruby:2.6.3-node-browsers
-  #       environment:
-  #         BUNDLER_VERSION: 2.0.1
-     #parallelism: 4
-     #Above runs the tests across four containers instead of one
      steps:
        - checkout
        - run: sudo apt-get update
        - run: gem install bundler --pre
-\      - run: bundle install
+       - run: bundle install
        - run:
           name: install dependencies
           command: |
             gem install bundler -v 2.0.2
             gem update --system
             bundle update --bundler
-  #     - run: bundle install
        - restore_cache:
           keys:
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
@@ -206,7 +195,6 @@
 
    deploy_docker:
      docker:
- #      - image: circleci/ruby:2.6.3-node-browsers
        - image: circleci/ruby:2.6.3
  #        environment:
  #          BUNDLER_VERSION: 2.0.1
