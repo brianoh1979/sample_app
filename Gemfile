@@ -20,6 +20,7 @@ gem 'rspec_junit_formatter', '0.4.1'
 gem 'rubocop', require: false
 gem 'fasterer'
 gem 'bundler-audit'
+#gem 'rake', '12.3.1'
 gem 'rails_best_practices'
 gem 'sass-rails', '5.0.6'
 gem 'simplecov', require: false, group: :test
