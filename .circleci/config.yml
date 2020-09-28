@@ -35,13 +35,14 @@
        - checkout
        - run: sudo apt-get update
        - run: gem install bundler --pre
+       - run: bundle install
        - run:
           name: install dependencies
           command: |
             gem install bundler -v 2.0.2
             gem update --system
             bundle update --bundler
-       - run: bundle install
+  #     - run: bundle install
        - run: sudo apt-get install -y nodejs
        - run: sudo apt-get install -y tzdata
        - restore_cache:
@@ -68,13 +69,14 @@
        - checkout
        - run: sudo apt-get update
        - run: gem install bundler --pre
+       - run: bundle install
        - run:
           name: install dependencies
           command: |
             gem install bundler -v 2.0.2
             gem update --system
             bundle update --bundler
-       - run: bundle install
+  #     - run: bundle install
        - run: sudo apt-get upgrade -y  
        - run: sudo apt-get install apt-transport-https
        - restore_cache:
@@ -115,6 +117,7 @@
        - checkout
        - run: sudo apt-get update
        - run: gem install bundler --pre
+       - run: bundle install
        - run:
           name: install dependencies
           command: |
@@ -127,7 +130,7 @@
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
        - run: bundle update --bundler
-       - run: bundle install
+  #     - run: bundle install
        - run: bundle exec bundler-audit check --ignore CVE-2015-7580 CVE-2015-7578 CVE-2015-7579
        - run: rails_best_practices .
    #Code Coverage
@@ -138,13 +141,14 @@
        - checkout
        - run: sudo apt-get update
        - run: gem install bundler --pre
+       - run: bundle install
        - run:
           name: install dependencies
           command: |
             gem install bundler -v 2.0.2
             gem update --system
             bundle update --bundler
-       - run: bundle install
+ #      - run: bundle install
        - run: sudo apt-get install -y nodejs
        - run: sudo apt-get install -y tzdata
        - restore_cache:
@@ -171,13 +175,14 @@
        - checkout
        - run: sudo apt-get update
        - run: gem install bundler --pre
+\      - run: bundle install
        - run:
           name: install dependencies
           command: |
             gem install bundler -v 2.0.2
             gem update --system
             bundle update --bundler
-       - run: bundle install
+  #     - run: bundle install
        - restore_cache:
           keys:
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
