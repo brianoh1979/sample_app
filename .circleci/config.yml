@@ -1,6 +1,3 @@
-
-#This is my config file for CircleCI - all onboarding objectives present
-# Adding in this line to test Contexts when default security group is removed
  version: 2
  jobs:
    build:
@@ -8,15 +5,8 @@
        - image: circleci/ruby:2.6.3
      steps:
        - checkout
- #      - run: apt-get update
        - run: sudo apt-get update
        - run: gem install bundler --pre
- #      - run: exit 0
- #      - slack/notify:
- #          channel: CQ4NHT0DC
- #          color: '#42e2f4'
- #          message: This is a custom orb message notification that job worked
- #          webhook: '${SLACK_WEBHOOK}'
        - run:
           name: install dependencies
           command: |
@@ -75,21 +65,15 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-  #     - run: apt-get update
        - run: sudo apt-get update
        - run: gem install bundler --pre
- #      - run: exit 0
- #      - slack/notify:
- #          channel: CQ4NHT0DC
- #          color: '#42e2f4'
- #          message: This is a custom orb message notification that job worked
- #          webhook: '${SLACK_WEBHOOK}'
        - run:
           name: install dependencies
           command: |
             gem install bundler -v 2.0.2
             gem update --system
             bundle update --bundler
+       - run: bundle install
        - run: sudo apt-get upgrade -y  
        - run: sudo apt-get install apt-transport-https
        - restore_cache:
@@ -107,7 +91,6 @@
        - run:
           name: install cypress
           command: npm install cypress --save-dev
-#       - run: gem install bundler:2.0.1
        - run: bundle update --bundler
        - run:
            name: Boot rails server
@@ -118,29 +101,19 @@
        - run: # open cypress and use sample_spec.js
           name: run
           command: $(npm bin)/cypress run -- --record --spec "cypress/integration/sample_spec.js" --reporter junit \ --reporter-options "mochaFile=XML/my-test-output.xml,toConsole=true"
-  #        command: $(npm bin)/cypress run -- --record --spec "cypress/integration/sample_spec.js" 
        - store_test_results:
            path: /tmp/results
        - store_artifacts:
            path: /tmp/results
            destination: results
-  #     - store_artifacts: # for display in Artifacts: https://circleci.com/docs$
-  #        path: /XML
    #Linters and static code analysis
    lintertest:
      docker:
        - image: circleci/ruby:2.6.3
      steps:
        - checkout
- #      - run: apt-get update
        - run: sudo apt-get update
        - run: gem install bundler --pre
- #      - run: exit 0
- #      - slack/notify:
- #          channel: CQ4NHT0DC
- #          color: '#42e2f4'
- #          message: This is a custom orb message notification that job worked
- #          webhook: '${SLACK_WEBHOOK}'
        - run:
           name: install dependencies
           command: |
@@ -152,8 +125,8 @@
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
- #      - run: gem install bundler:2.0.1
        - run: bundle update --bundler
+       - run: bundle install
        - run: bundle exec bundler-audit check --ignore CVE-2015-7580 CVE-2015-7578 CVE-2015-7579
        - run: rails_best_practices .
    #Code Coverage
@@ -178,7 +151,6 @@
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
- #      - run: gem install bundler:2.0.1
        - run: bundle update --bundler
        - run: rake db:test:prepare
        - run: rails test
@@ -196,22 +168,15 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-  #     - run: apt-get update
-  #     - run: apt-get install sudo
        - run: sudo apt-get update
        - run: gem install bundler --pre
- #      - run: exit 0
- #      - slack/notify:
- #          channel: CQ4NHT0DC
- #          color: '#42e2f4'
- #          message: This is a custom orb message notification that job worked
- #          webhook: '${SLACK_WEBHOOK}'
        - run:
           name: install dependencies
           command: |
             gem install bundler -v 2.0.2
             gem update --system
             bundle update --bundler
+       - run: bundle install
        - restore_cache:
           keys:
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
