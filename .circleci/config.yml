@@ -37,7 +37,7 @@
    #Start of the Unit Testing section
    unittest:
      docker:
-       - image: circleci/ruby:2.4.1
+       - image: circleci/ruby:2.6.3
      parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
@@ -64,7 +64,7 @@
    #Start of Browser testing
    browsertest:
      docker:
-       - image: circleci/ruby:2.4.1  
+       - image: circleci/ruby:2.6.3  
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
@@ -108,7 +108,7 @@
    #Linters and static code analysis
    lintertest:
      docker:
-       - image: circleci/ruby:2.4.1
+       - image: circleci/ruby:2.6.3
      steps:
        - checkout
  #      - run: apt-get update
@@ -125,7 +125,7 @@
    #Code Coverage
    codecoveragetest:
      docker:
-       - image: circleci/ruby:2.4.1
+       - image: circleci/ruby:2.6.3
      steps:
        - checkout
  #      - run: apt-get update
@@ -147,7 +147,7 @@
     #Deploy job
    deploy:
      docker:
-       - image: circleci/ruby:2.4.1
+       - image: circleci/ruby:2.6.3
   #     - image: circleci/ruby:2.6.3-node-browsers
   #       environment:
   #         BUNDLER_VERSION: 2.0.1
@@ -182,7 +182,7 @@
    deploy_docker:
      docker:
  #      - image: circleci/ruby:2.6.3-node-browsers
-       - image: circleci/ruby:2.4.1
+       - image: circleci/ruby:2.6.3
  #        environment:
  #          BUNDLER_VERSION: 2.0.1
      steps:
