@@ -42,21 +42,15 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-  #     - run: apt-get update
        - run: sudo apt-get update
        - run: gem install bundler --pre
- #      - run: exit 0
- #      - slack/notify:
- #          channel: CQ4NHT0DC
- #          color: '#42e2f4'
- #          message: This is a custom orb message notification that job worked
- #          webhook: '${SLACK_WEBHOOK}'
        - run:
           name: install dependencies
           command: |
             gem install bundler -v 2.0.2
             gem update --system
             bundle update --bundler
+       - run: bundle install
        - run: sudo apt-get install -y nodejs
        - run: sudo apt-get install -y tzdata
        - restore_cache:
@@ -105,6 +99,7 @@
             - gem-cache-v1
        - run: curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
        - run: sudo apt-get install -y nodejs
+       - run: sudo apt-get install npm
        - run: sudo apt-get install -y tzdata
        - run:
           name: Install Cypress dependencies
@@ -159,7 +154,7 @@
             - gem-cache-v1
  #      - run: gem install bundler:2.0.1
        - run: bundle update --bundler
-       - run: bundle-audit check --ignore CVE-2015-7580 CVE-2015-7578 CVE-2015-7579
+       - run: bundle exec bundler-audit check --ignore CVE-2015-7580 CVE-2015-7578 CVE-2015-7579
        - run: rails_best_practices .
    #Code Coverage
    codecoveragetest:
@@ -167,21 +162,15 @@
        - image: circleci/ruby:2.6.3
      steps:
        - checkout
- #      - run: apt-get update
        - run: sudo apt-get update
        - run: gem install bundler --pre
- #      - run: exit 0
- #      - slack/notify:
- #          channel: CQ4NHT0DC
- #          color: '#42e2f4'
- #          message: This is a custom orb message notification that job worked
- #          webhook: '${SLACK_WEBHOOK}'
        - run:
           name: install dependencies
           command: |
             gem install bundler -v 2.0.2
             gem update --system
             bundle update --bundler
+       - run: bundle install
        - run: sudo apt-get install -y nodejs
        - run: sudo apt-get install -y tzdata
        - restore_cache:
