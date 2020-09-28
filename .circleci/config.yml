@@ -8,7 +8,7 @@
        - image: circleci/ruby:2.4.1
      steps:
        - checkout
-       - run: apt-get update
+ #      - run: apt-get update
        - run: sudo apt-get update
        - run: bundle update --bundler
  #      - run: exit 0
@@ -37,12 +37,12 @@
    #Start of the Unit Testing section
    unittest:
      docker:
-       - image: brianoh1979/bohruby:ruby263
+       - image: circleci/ruby:2.4.1
      parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-       - run: apt-get update
+  #     - run: apt-get update
        - run: sudo apt-get update
        - run: sudo apt-get install -y nodejs
        - run: sudo apt-get install -y tzdata
@@ -64,11 +64,11 @@
    #Start of Browser testing
    browsertest:
      docker:
-       - image: brianoh1979/bohruby:ruby263  
+       - image: circleci/ruby:2.4.1  
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-       - run: apt-get update
+  #     - run: apt-get update
        - run: sudo apt-get update
        - run: sudo apt-get upgrade -y  
        - run: sudo apt-get install apt-transport-https
@@ -108,10 +108,10 @@
    #Linters and static code analysis
    lintertest:
      docker:
-       - image: brianoh1979/bohruby:ruby263
+       - image: circleci/ruby:2.4.1
      steps:
        - checkout
-       - run: apt-get update
+ #      - run: apt-get update
        - run: sudo apt-get update
        - restore_cache:
           keys:
@@ -125,10 +125,10 @@
    #Code Coverage
    codecoveragetest:
      docker:
-       - image: brianoh1979/bohruby:ruby263
+       - image: circleci/ruby:2.4.1
      steps:
        - checkout
-       - run: apt-get update
+ #      - run: apt-get update
        - run: sudo apt-get update
        - run: sudo apt-get install -y nodejs
        - run: sudo apt-get install -y tzdata
@@ -147,7 +147,7 @@
     #Deploy job
    deploy:
      docker:
-       - image: brianoh1979/bohruby:ruby263
+       - image: circleci/ruby:2.4.1
   #     - image: circleci/ruby:2.6.3-node-browsers
   #       environment:
   #         BUNDLER_VERSION: 2.0.1
@@ -155,8 +155,8 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-       - run: apt-get update
-       - run: apt-get install sudo
+  #     - run: apt-get update
+  #     - run: apt-get install sudo
        - run: sudo apt-get update
        - restore_cache:
           keys:
@@ -182,7 +182,7 @@
    deploy_docker:
      docker:
  #      - image: circleci/ruby:2.6.3-node-browsers
-       - image: brianoh1979/bohruby:ruby263
+       - image: circleci/ruby:2.4.1
  #        environment:
  #          BUNDLER_VERSION: 2.0.1
      steps:
