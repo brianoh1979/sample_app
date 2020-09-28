@@ -5,7 +5,7 @@
  jobs:
    build:
      docker:
-       - image: circleci/ruby:2.4.1
+       - image: circleci/ruby:2.6.3
      steps:
        - checkout
  #      - run: apt-get update
