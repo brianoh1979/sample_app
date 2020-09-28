@@ -10,7 +10,7 @@
        - checkout
  #      - run: apt-get update
        - run: sudo apt-get update
- #      - run: bundle update --bundler
+       - run: gem install bundler --pre
  #      - run: exit 0
  #      - slack/notify:
  #          channel: CQ4NHT0DC
