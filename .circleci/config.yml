@@ -51,14 +51,14 @@
             - gem-cache-v2
        - run: bundle update --bundler
        - run: bundle install
-       - run: rake db:test:prepare 
+#       - run: rake db:test:prepare 
        - run:
            command: |
              echo $(circleci tests glob "spec/features/models/*.rb") 
              circleci tests glob "spec/features/models/*.rb" | xargs -n 1 echo           
        - run: TESTFILES=$(circleci tests glob "spec/features/models/*.rb" | circleci tests split --split-by=filesize)
        - run: echo $TESTFILES
-       - run: bundle exec rspec -- ${TESTFILES}
+#       - run: bundle exec rspec -- ${TESTFILES}
    #Start of Browser testing
    browsertest:
      docker:
@@ -95,20 +95,20 @@
           command: npm install cypress --save-dev
        - run: bundle update --bundler
        - run: bundle install
-       - run:
-           name: Boot rails server
-           command: bin/rails s
-           background: true
+ #      - run:
+ #          name: Boot rails server
+ #          command: bin/rails s
+ #          background: true
        - run: mkdir /tmp/results
        - run: npm install --save-dev mocha mochawesome mochawesome-merge mochawesome-report-generator
-       - run: # open cypress and use sample_spec.js
-          name: run
-          command: $(npm bin)/cypress run -- --record --spec "cypress/integration/sample_spec.js" --reporter junit \ --reporter-options "mochaFile=XML/my-test-output.xml,toConsole=true"
-       - store_test_results:
-           path: /tmp/results
-       - store_artifacts:
-           path: /tmp/results
-           destination: results
+ #      - run: # open cypress and use sample_spec.js
+ #         name: run
+ #         command: $(npm bin)/cypress run -- --record --spec "cypress/integration/sample_spec.js" --reporter junit \ --reporter-options "mochaFile=XML/my-test-output.xml,toConsole=true"
+ #      - store_test_results:
+ #          path: /tmp/results
+ #      - store_artifacts:
+ #          path: /tmp/results
+ #          destination: results
    #Linters and static code analysis
    lintertest:
      docker:
@@ -132,7 +132,7 @@
             - gem-cache-v2
        - run: bundle update --bundler
   #     - run: bundle exec bundler-audit check --ignore CVE-2015-7580 CVE-2015-7578 CVE-2015-7579
-       - run: rails_best_practices .
+  #     - run: rails_best_practices .
    #Code Coverage
    codecoveragetest:
      docker:
@@ -158,11 +158,11 @@
             - gem-cache-v2
        - run: bundle update --bundler
        - run: bundle install
-       - run: rake db:test:prepare
-       - run: rails test
-       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
-          path: coverage
-          prefix: coverage
+  #     - run: rake db:test:prepare
+  #     - run: rails test
+  #     - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
+  #        path: coverage
+  #        prefix: coverage
     #Deploy job
    deploy:
      docker:
