@@ -50,6 +50,7 @@
             - gem-cache-v2-{{ arch }}-{{ .Branch }}
             - gem-cache-v2
        - run: bundle update --bundler
+       - run: bundle install
        - run: rake db:test:prepare 
        - run:
            command: |
@@ -93,6 +94,7 @@
           name: install cypress
           command: npm install cypress --save-dev
        - run: bundle update --bundler
+       - run: bundle install
        - run:
            name: Boot rails server
            command: bin/rails s
@@ -129,7 +131,7 @@
             - gem-cache-v2-{{ arch }}-{{ .Branch }}
             - gem-cache-v2
        - run: bundle update --bundler
-       - run: bundle exec bundler-audit check --ignore CVE-2015-7580 CVE-2015-7578 CVE-2015-7579
+  #     - run: bundle exec bundler-audit check --ignore CVE-2015-7580 CVE-2015-7578 CVE-2015-7579
        - run: rails_best_practices .
    #Code Coverage
    codecoveragetest:
@@ -155,6 +157,7 @@
             - gem-cache-v2-{{ arch }}-{{ .Branch }}
             - gem-cache-v2
        - run: bundle update --bundler
+       - run: bundle install
        - run: rake db:test:prepare
        - run: rails test
        - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
