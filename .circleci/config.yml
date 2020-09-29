@@ -27,7 +27,7 @@
    #Start of the Unit Testing section
    unittest:
      docker:
-       - image: circleci/ruby:2.6.3-node-browsers
+       - image: brianoh1979/ruby263:latest
      parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
@@ -61,7 +61,7 @@
    #Start of Browser testing
    browsertest:
      docker:
-       - image: circleci/ruby:2.6.3-node-browsers  
+       - image: brianoh1979/ruby263:latest  
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
@@ -109,7 +109,7 @@
    #Linters and static code analysis
    lintertest:
      docker:
-       - image: circleci/ruby:2.6.3-node-browsers
+       - image: brianoh1979/ruby263:latest
      steps:
        - checkout
        - run: sudo apt-get update
@@ -132,7 +132,7 @@
    #Code Coverage
    codecoveragetest:
      docker:
-       - image: circleci/ruby:2.6.3-node-browsers
+       - image: brianoh1979/ruby263:latest
      steps:
        - checkout
        - run: sudo apt-get update
