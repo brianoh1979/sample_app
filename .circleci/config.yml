@@ -27,7 +27,7 @@
    #Start of the Unit Testing section
    unittest:
      docker:
-       - image: circleci/ruby:2.6.3
+       - image: brianoh1979/bohruby:ruby263
      parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
@@ -61,7 +61,7 @@
    #Start of Browser testing
    browsertest:
      docker:
-       - image: circleci/ruby:2.6.3  
+       - image: brianoh1979/bohruby:ruby263  
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
@@ -109,7 +109,7 @@
    #Linters and static code analysis
    lintertest:
      docker:
-       - image: circleci/ruby:2.6.3
+       - image: brianoh1979/bohruby:ruby263
      steps:
        - checkout
        - run: sudo apt-get update
@@ -132,7 +132,7 @@
    #Code Coverage
    codecoveragetest:
      docker:
-       - image: circleci/ruby:2.6.3
+       - image: brianoh1979/bohruby:ruby263
      steps:
        - checkout
        - run: sudo apt-get update
@@ -219,25 +219,25 @@
    build_and_test:
      jobs:
        - build
- #      - unittest:
- #          requires:
- #            - build
- #      - browsertest:
- #          requires:
- #            - build
- #      - lintertest:
- #          requires:
- #            - build
- #      - codecoveragetest:
- #          requires:
- #            - build
-       - deploy:
+       - unittest:
            requires:
              - build
- #            - unittest
- #            - browsertest
- #            - lintertest
- #            - codecoveragetest
+       - browsertest:
+           requires:
+             - build
+       - lintertest:
+           requires:
+             - build
+       - codecoveragetest:
+           requires:
+             - build
+       - deploy:
+           requires:
+ #            - build
+             - unittest
+             - browsertest
+             - lintertest
+             - codecoveragetest
  #          filters:
  #            branches:
  #              only: master
