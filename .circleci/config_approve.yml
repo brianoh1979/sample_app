@@ -1,0 +1,35 @@
+ jobs:
+   lint_and_test:
+     docker:
+       - image: ruby:latest
+     steps:
+       - checkout
+       - run: echo "Hello world 7!"
+       - slack/notify:
+           channel: CQ4NHT0DC
+           color: '#42e2f4'
+           message: Please click on the following link and approve the on hold job called approve_branch_deployment - https://circleci.com/workflow-run/$CIRCLE_WORKFLOW_ID
+           webhook: '${SLACK_WEBHOOK}'
+   lint_and_test_2:
+     docker:
+       - image: ruby:latest
+     steps:
+       - checkout
+       - run: echo "Hello world 8!"
+
+ orbs:
+   slack: circleci/slack@3.4.1
+ version: 2.1
+
+ workflows:
+   version: 2
+   build_and_deploy_branch:
+     jobs:
+       - lint_and_test
+       - approve_branch_deployment:
+           type: approval
+           requires:
+             - lint_and_test
+       - lint_and_test_2:
+           requires:
+             - approve_branch_deployment
