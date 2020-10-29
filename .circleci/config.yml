@@ -147,9 +147,9 @@
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
        - run:
-           name: Deploy Master to Heroku
+           name: Deploy Develop to Heroku
            command: |
-             git push https://heroku:$HEROKU_API_KEY@git.heroku.com/thawing-cliffs-50633.git develop
+             git push https://heroku:$HEROKU_API_KEY2@git.heroku.com/thawing-cliffs-50633.git develop
 
  workflows:
    version: 2
@@ -174,7 +174,4 @@
              - browsertest
              - lintertest
              - codecoveragetest
-  #         filters:
-  #           branches:
-  #             only: master
 
