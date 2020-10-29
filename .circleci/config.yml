@@ -177,7 +177,7 @@
              - browsertest
              - lintertest
              - codecoveragetest
-           filters:
-             branches:
-               only: master
+  #         filters:
+  #           branches:
+  #             only: master
 
