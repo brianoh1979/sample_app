@@ -149,7 +149,7 @@
        - run:
            name: Deploy Develop to Heroku
            command: |
-             git push https://heroku:$HEROKU_API_KEY2@git.heroku.com/thawing-cliffs-50633.git develop
+             git push https://heroku:$HEROKU_API_KEY2@git.heroku.com/thawing-cliffs-50633.git master
 
  workflows:
    version: 2
