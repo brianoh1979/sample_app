@@ -84,12 +84,15 @@
        - run: npm install --save-dev mocha mochawesome mochawesome-merge mochawesome-report-generator
        - run: # open cypress and use sample_spec.js
           name: run
+  #        command: $(npm bin)/cypress run -- --record --spec "cypress/integration/sample_spec.js" --reporter junit \ --reporter-options "mochaFile=XML/my-test-output.xml,toConsole=true"
           command: $(npm bin)/cypress run -- --record --spec "cypress/integration/sample_spec.js" 
        - store_test_results:
            path: /tmp/results
        - store_artifacts:
            path: /tmp/results
            destination: results
+  #     - store_artifacts: # for display in Artifacts: https://circleci.com/docs$
+  #        path: /XML
    #Linters and static code analysis
    lintertest:
      docker:
@@ -147,9 +150,9 @@
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
        - run:
-           name: Deploy Develop to Heroku
+           name: Deploy Master to Heroku
            command: |
-             git push --force https://heroku:$HEROKU_API_KEY2@git.heroku.com/thawing-cliffs-50633.git master
+             git push https://heroku:$HEROKU_API_KEY@git.heroku.com/thawing-cliffs-50633.git master
 
  workflows:
    version: 2
@@ -174,4 +177,7 @@
              - browsertest
              - lintertest
              - codecoveragetest
+           filters:
+             branches:
+               only: master
 

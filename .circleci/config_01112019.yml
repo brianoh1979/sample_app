@@ -1,3 +1,4 @@
+
 #This is my config file for CircleCI
  version: 2
  jobs:
@@ -84,12 +85,15 @@
        - run: npm install --save-dev mocha mochawesome mochawesome-merge mochawesome-report-generator
        - run: # open cypress and use sample_spec.js
           name: run
+  #        command: $(npm bin)/cypress run -- --record --spec "cypress/integration/sample_spec.js" --reporter junit \ --reporter-options "mochaFile=XML/my-test-output.xml,toConsole=true"
           command: $(npm bin)/cypress run -- --record --spec "cypress/integration/sample_spec.js" 
        - store_test_results:
            path: /tmp/results
        - store_artifacts:
            path: /tmp/results
            destination: results
+  #     - store_artifacts: # for display in Artifacts: https://circleci.com/docs$
+  #        path: /XML
    #Linters and static code analysis
    lintertest:
      docker:
@@ -147,9 +151,37 @@
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
        - run:
-           name: Deploy Develop to Heroku
+           name: Deploy Master to Heroku
            command: |
-             git push --force https://heroku:$HEROKU_API_KEY2@git.heroku.com/thawing-cliffs-50633.git master
+             git push https://heroku:$HEROKU_API_KEY@git.heroku.com/thawing-cliffs-50633.git master
+
+       - deploy:
+           name: conditionally run a deploy job
+           command: |
+            # replace this with your build/deploy check (i.e. current branch is "release")
+             if [[ $CIRCLE_BRANCH = "master" ]]; then
+               curl --user ${CIRCLE_API_USER_TOKEN}: \
+                 --data build_parameters[CIRCLE_JOB]=deploy_docker \
+                 --data revision=$CIRCLE_SHA1 \
+                 https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/tree/$CIRCLE_BRANCH
+             fi 
+
+   deploy_docker:
+     docker:
+       - image: circleci/ruby:2.6.3-node-browsers
+         environment:
+           BUNDLER_VERSION: 2.0.1
+     steps:
+     - run:
+        name: Check if website returns a 500
+        command: |
+          response=$(curl -Is https://thawing-cliffs-50633.herokuapp.com | head -1)
+          echo ${response}
+          if [[ ${response} == *200* ]]; then
+          echo "Website can be reached"
+          else
+          echo "Website is returning a 500"
+          fi
 
  workflows:
    version: 2
@@ -174,4 +206,7 @@
              - browsertest
              - lintertest
              - codecoveragetest
+           filters:
+             branches:
+               only: master
 
