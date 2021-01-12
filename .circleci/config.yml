@@ -1,6 +1,6 @@
 #This is my config file for CircleCI
  version: 2
- jobs:
+ jobs2:
    build:
      docker:
        - image: circleci/ruby:2.6.3-node-browsers
