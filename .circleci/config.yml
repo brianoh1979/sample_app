@@ -2,10 +2,8 @@
  version: 2
  jobs:
    build:
-     docker:
-       - image: circleci/ruby:2.6.3-node-browsers
-         environment:
-           BUNDLER_VERSION: 2.0.1
+     machine: true
+     resource_class: brianoh1979/brian-runner
      #parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
@@ -29,10 +27,8 @@
           - vendor/bundle
    #Start of the Unit Testing
    unittest:
-     docker:
-       - image: circleci/ruby:2.6.3-node-browsers
-         environment:
-           BUNDLER_VERSION: 2.0.1
+     machine: true
+     resource_class: brianoh1979/brian-runner
      parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
@@ -54,10 +50,8 @@
        - run: bundle exec rspec -- ${TESTFILES}
    #Start of Browser testing
    browsertest:
-     docker:
-       - image: circleci/ruby:2.6.3-node-browsers
-         environment:
-           BUNDLER_VERSION: 2.0.1
+     machine: true
+     resource_class: brianoh1979/brian-runner
      #parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
@@ -92,10 +86,8 @@
            destination: results
    #Linters and static code analysis
    lintertest:
-     docker:
-       - image: circleci/ruby:2.6.3-node-browsers
-         environment:
-           BUNDLER_VERSION: 2.0.1
+     machine: true
+     resource_class: brianoh1979/brian-runner
      #parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
@@ -111,10 +103,8 @@
        - run: rails_best_practices .
    #Code Coverage
    codecoveragetest:
-     docker:
-       - image: circleci/ruby:2.6.3-node-browsers
-         environment:
-           BUNDLER_VERSION: 2.0.1
+     machine: true
+     resource_class: brianoh1979/brian-runner
      #parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
@@ -133,10 +123,8 @@
           prefix: coverage
     #Deploy job
    deploy:
-     docker:
-       - image: circleci/ruby:2.6.3-node-browsers
-         environment:
-           BUNDLER_VERSION: 2.0.1
+     machine: true
+     resource_class: brianoh1979/brian-runner
      #parallelism: 4
      #Above runs the tests across four containers instead of one
      steps:
