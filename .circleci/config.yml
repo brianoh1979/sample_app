@@ -39,7 +39,7 @@
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
-       - run: gem install bundler:2.0.1
+#       - run: gem install bundler:2.0.1
        - run: bundle update --bundler
        - run: rake db:test:prepare 
        - run:
@@ -69,7 +69,7 @@
        - run:
           name: install cypress
           command: npm install cypress --save-dev
-       - run: gem install bundler:2.0.1
+ #      - run: gem install bundler:2.0.1
        - run: bundle update --bundler
        - run:
            name: Boot rails server
@@ -98,7 +98,7 @@
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
-       - run: gem install bundler:2.0.1
+  #     - run: gem install bundler:2.0.1
        - run: bundle update --bundler
        - run: bundle-audit check --ignore CVE-2015-7580 CVE-2015-7578 CVE-2015-7579
        - run: rails_best_practices .
@@ -115,7 +115,7 @@
             - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
             - gem-cache-v1-{{ arch }}-{{ .Branch }}
             - gem-cache-v1
-       - run: gem install bundler:2.0.1
+  #     - run: gem install bundler:2.0.1
        - run: bundle update --bundler
        - run: rake db:test:prepare
        - run: rails test
