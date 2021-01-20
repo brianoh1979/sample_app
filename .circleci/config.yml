@@ -42,6 +42,7 @@
 #       - run: gem install bundler:2.0.1
        - run: bundle init
        - run: bundle update --bundler
+       - run: bundle install
        - run: rake db:test:prepare 
        - run:
            command: |
@@ -121,6 +122,7 @@
   #     - run: gem install bundler:2.0.1
        - run: bundle init
        - run: bundle update --bundler
+       - run: bundle install
        - run: rake db:test:prepare
        - run: rails test
        - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
