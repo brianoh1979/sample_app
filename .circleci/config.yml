@@ -104,7 +104,8 @@
   #     - run: gem install bundler:2.0.1
        - run: bundle init
        - run: bundle update --bundler
-       - run: bundle-audit check --ignore CVE-2015-7580 CVE-2015-7578 CVE-2015-7579
+       - run: bundle exec bundle audit
+  #     - run: bundle-audit check --ignore CVE-2015-7580 CVE-2015-7578 CVE-2015-7579
        - run: rails_best_practices .
    #Code Coverage
    codecoveragetest:
