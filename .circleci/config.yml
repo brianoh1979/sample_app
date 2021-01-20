@@ -2,7 +2,9 @@
  version: 2.1
 
  orbs:
+   ruby: circleci/ruby@1.1.2
    cypress: cypress-io/cypress@1.26.0
+   ruby-linter: amyroi/ruby-linter@1.0.0
 
  jobs:
    build:
@@ -38,23 +40,24 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-       - restore_cache:
-          keys:
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}
-            - gem-cache-v1
+       - ruby/rspec-test
+#       - restore_cache:
+#          keys:
+#            - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+#            - gem-cache-v1-{{ arch }}-{{ .Branch }}
+#            - gem-cache-v1
 #       - run: gem install bundler:2.0.1
-       - run: bundle init
-       - run: bundle update --bundler
-       - run: bundle install
-       - run: rake db:test:prepare 
-       - run:
-           command: |
-             echo $(circleci tests glob "spec/features/models/*.rb") 
-             circleci tests glob "spec/features/models/*.rb" | xargs -n 1 echo           
-       - run: TESTFILES=$(circleci tests glob "spec/features/models/*.rb" | circleci tests split --split-by=filesize)
-       - run: echo $TESTFILES
-       - run: bundle exec rspec -- ${TESTFILES}
+#       - run: bundle init
+#       - run: bundle update --bundler
+#       - run: bundle install
+#       - run: rake db:test:prepare 
+#       - run:
+#           command: |
+#             echo $(circleci tests glob "spec/features/models/*.rb") 
+#             circleci tests glob "spec/features/models/*.rb" | xargs -n 1 echo           
+#       - run: TESTFILES=$(circleci tests glob "spec/features/models/*.rb" | circleci tests split --split-by=filesize)
+#       - run: echo $TESTFILES
+#       - run: bundle exec rspec -- ${TESTFILES}
    #Start of Browser testing
    browsertest:
      machine: true
@@ -101,22 +104,24 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
+       - ruby-linter/rails_best_practices:
+           paths: .
        - run:
             name: "Gem path envvars"
             command: |
               GEM_PATH=$GEM_HOME:$GEM_HOME/ruby/$RUBY_MAJOR.0
               PATH=$GEM_HOME/bin:$GEM_HOME/ruby/$RUBY_MAJOR.0/bin:$PATH
-       - restore_cache:
-          keys:
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}
-            - gem-cache-v1
+ #      - restore_cache:
+ #         keys:
+ #           - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+ #           - gem-cache-v1-{{ arch }}-{{ .Branch }}
+ #           - gem-cache-v1
   #     - run: gem install bundler:2.0.1
-       - run: bundle init
-       - run: bundle update --bundler
-       - run: bundle exec bundle audit
+ #      - run: bundle init
+ #      - run: bundle update --bundler
+ #      - run: bundle exec bundle audit
   #     - run: bundle-audit check --ignore CVE-2015-7580 CVE-2015-7578 CVE-2015-7579
-       - run: rails_best_practices .
+ #      - run: rails_best_practices .
    #Code Coverage
    codecoveragetest:
      machine: true
@@ -165,22 +170,26 @@
        - unittest:
            requires:
              - build
+       - cypress/install:
+           cache-key: >-
+             cache-{{ arch }}-{{ .Branch }}-{{ checksum "frontend/package.json"
+             }}
        - cypress/run:
            requires:
-             - build
+             - cypress/install
  #      - browsertest:
  #          requires:
  #            - build
        - lintertest:
            requires:
              - build
-       - codecoveragetest:
-           requires:
-             - build
+ #      - codecoveragetest:
+ #          requires:
+ #            - build
        - deploy:
            requires:
              - unittest
-             - browsertest
+             - cypress/run
              - lintertest
-             - codecoveragetest
+ #            - codecoveragetest
 
