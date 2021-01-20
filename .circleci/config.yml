@@ -9,11 +9,11 @@
      steps:
        - checkout
 #       - run: apt-get update
-       - run:
-          name: install dependencies
-          command: |
-            gem update --system
-            gem install bundler
+#       - run:
+#          name: install dependencies
+#          command: |
+#            gem update --system
+#            gem install bundler
        # Below step should kick in from second run onwards
        - restore_cache:
           keys:
