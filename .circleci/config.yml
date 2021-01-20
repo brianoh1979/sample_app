@@ -180,7 +180,7 @@
        - deploy:
            requires:
              - unittest
-             - browsertest
+             - cypress/run
              - lintertest
              - codecoveragetest
 
