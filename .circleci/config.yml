@@ -8,6 +8,7 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
+       - run: bundle init
 #       - run: apt-get update
 #       - run:
 #          name: install dependencies
