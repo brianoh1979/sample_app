@@ -177,7 +177,7 @@
  #      - unittest:
  #          requires:
  #            - build
-       - cypress/install:
+       - cypress/install
        - cypress/run:
            yarn: true
            requires:
