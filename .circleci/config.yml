@@ -16,7 +16,7 @@
      steps:
        - checkout
        - run: bundle init
-       - ruby/install-deps
+#       - ruby/install-deps
        - node/install-packages
 #       - run: apt-get update
 #       - run:
