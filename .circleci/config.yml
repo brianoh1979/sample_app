@@ -17,9 +17,7 @@
        - checkout
        - run: bundle init
        - ruby/install-deps
-       - node/install-packages:
-           cache-key: yarn.lock
-           pkg-manager: yarn
+       - node/install-packages
 #       - run: apt-get update
 #       - run:
 #          name: install dependencies
