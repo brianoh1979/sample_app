@@ -10,7 +10,6 @@
      #Above runs the tests across four containers instead of one
      steps:
        - checkout
-       - run: notacommand
        - run: sudo apt-get update
        - run:
           name: install dependencies
